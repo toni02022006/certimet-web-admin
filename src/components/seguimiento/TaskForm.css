@@ -1,0 +1,75 @@
+.task-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.task-form input,
+.task-form textarea,
+.task-form select {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  background: #fcfcfd;
+  font-family: inherit;
+}
+
+.task-form input:focus,
+.task-form textarea:focus,
+.task-form select:focus {
+  outline: none;
+  border-color: #1a5276;
+  box-shadow: 0 0 0 3px rgba(26, 82, 118, 0.15);
+  background: #ffffff;
+}
+
+.task-form textarea {
+  min-height: 70px;
+  resize: vertical;
+}
+
+.task-form .task-form-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 4px;
+}
+
+.task-form .task-form-actions .task-timer {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #1a5276;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 1px;
+  background: #f8fafc;
+  padding: 4px 16px;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.task-form button {
+  background: #1a5276;
+  color: white;
+  border: none;
+  padding: 10px 28px;
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  margin-left: auto;
+}
+
+.task-form button:hover:not(:disabled) {
+  background: #0a2a4a;
+  transform: scale(1.02);
+}
+
+.task-form button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}

@@ -1,0 +1,398 @@
+/* ============================================================
+   Contenedor principal
+   ============================================================ */
+.tabla-tareas-container {
+  margin-top: 32px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  padding: 20px 24px;
+  transition: box-shadow 0.3s ease;
+}
+
+.tabla-tareas-container:hover {
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+}
+
+/* ============================================================
+   Cabecera
+   ============================================================ */
+.tabla-tareas-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.tabla-tareas-title {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.tabla-tareas-title h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #0a2a4a;
+  margin: 0;
+}
+
+.tabla-tareas-count {
+  font-size: 0.9rem;
+  color: #6c757d;
+  background: #f1f3f5;
+  padding: 2px 12px;
+  border-radius: 20px;
+}
+
+.tabla-tareas-search input {
+  padding: 8px 16px;
+  border: 1px solid #dee2e6;
+  border-radius: 30px;
+  font-size: 0.95rem;
+  min-width: 260px;
+  background: #f8f9fa;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.tabla-tareas-search input:focus {
+  outline: none;
+  border-color: #1a5276;
+  box-shadow: 0 0 0 3px rgba(26, 82, 118, 0.15);
+  background: white;
+}
+
+/* ============================================================
+   Estados vacío / carga
+   ============================================================ */
+.tabla-tareas-loading,
+.tabla-tareas-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: #6c757d;
+  font-size: 1rem;
+}
+
+/* ============================================================
+   Tabla
+   ============================================================ */
+.tabla-tareas-wrapper {
+  overflow-x: auto;
+  margin-bottom: 16px;
+}
+
+.tabla-tareas {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.tabla-tareas thead {
+  background: #f8fafc;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.tabla-tareas th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  color: #1a3a5a;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.3px;
+}
+
+.tabla-tareas td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f1f3f5;
+  vertical-align: middle;
+}
+
+.tabla-fila {
+  transition: background 0.15s ease;
+}
+
+.tabla-fila:hover {
+  background: #f8fafc;
+}
+
+/* ============================================================
+   Badges de estado
+   ============================================================ */
+.badge-estado {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
+
+.badge-verde {
+  background: #d4edda;
+  color: #155724;
+}
+
+.badge-amarillo {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.badge-gris {
+  background: #e2e3e5;
+  color: #383d41;
+}
+
+/* ============================================================
+   Acciones (botones)
+   ============================================================ */
+.tabla-acciones {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.btn-accion {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background 0.2s, color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-editar {
+  color: #007bff;
+}
+.btn-editar:hover {
+  background: #e3f0ff;
+  color: #0056b3;
+}
+
+.btn-reanudar {
+  color: #28a745;
+}
+.btn-reanudar:hover {
+  background: #d4edda;
+  color: #1e7e34;
+}
+
+.btn-finalizar {
+  color: #ffc107;
+}
+.btn-finalizar:hover {
+  background: #fff3cd;
+  color: #d39e00;
+}
+
+.btn-eliminar {
+  color: #dc3545;
+}
+.btn-eliminar:hover {
+  background: #f8d7da;
+  color: #bd2130;
+}
+
+/* ============================================================
+   Paginación
+   ============================================================ */
+.tabla-paginacion {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #e9ecef;
+}
+
+.tabla-paginacion-info {
+  font-size: 0.95rem;
+  color: #495057;
+}
+
+.tabla-paginacion-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tabla-paginacion-controls select {
+  padding: 4px 8px;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  background: white;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.btn-pagina {
+  background: white;
+  border: 1px solid #dee2e6;
+  padding: 4px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.btn-pagina:hover:not(:disabled) {
+  background: #e9ecef;
+}
+.btn-pagina:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pagina-actual {
+  font-weight: 600;
+  color: #1a3a5a;
+}
+
+/* ============================================================
+   Modal de edición
+   ============================================================ */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal-content {
+  background: white;
+  padding: 28px 32px;
+  border-radius: 16px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.2);
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-content h3 {
+  margin-top: 0;
+  color: #0a2a4a;
+  font-weight: 600;
+}
+
+.modal-field {
+  margin-bottom: 16px;
+}
+
+.modal-field label {
+  display: block;
+  font-weight: 500;
+  color: #1a3a5a;
+  margin-bottom: 4px;
+  font-size: 0.9rem;
+}
+
+.modal-field input,
+.modal-field textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.modal-field input:focus,
+.modal-field textarea:focus {
+  outline: none;
+  border-color: #1a5276;
+  box-shadow: 0 0 0 3px rgba(26, 82, 118, 0.15);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.modal-actions button {
+  padding: 8px 24px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-cancelar {
+  background: #f1f3f5;
+  color: #495057;
+}
+.btn-cancelar:hover {
+  background: #e9ecef;
+}
+
+.btn-guardar {
+  background: #1a5276;
+  color: white;
+}
+.btn-guardar:hover {
+  background: #0a2a4a;
+}
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+@media (max-width: 768px) {
+  .tabla-tareas-container {
+    padding: 16px;
+  }
+  .tabla-tareas-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .tabla-tareas-search input {
+    min-width: auto;
+    width: 100%;
+  }
+  .tabla-paginacion {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .tabla-paginacion-controls {
+    justify-content: center;
+  }
+  .modal-content {
+    padding: 20px;
+  }
+}

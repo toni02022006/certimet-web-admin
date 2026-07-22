@@ -1,0 +1,298 @@
+/* ======================================================
+   ESTILOS PARA ASIGNACION ADMIN
+   ====================================================== */
+.asignacion-admin {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.asignacion-admin h2 {
+  margin-bottom: 20px;
+  font-size: 1.8rem;
+  color: #1a202c;
+}
+
+.asignacion-tabs {
+  display: flex;
+  gap: 10px;
+  border-bottom: 2px solid #e2e8f0;
+  margin-bottom: 30px;
+}
+
+.asignacion-tabs button {
+  padding: 10px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #4a5568;
+}
+
+.asignacion-tabs button.active {
+  border-bottom-color: #3182ce;
+  color: #2b6cb0;
+}
+
+.asignacion-tabs button:hover {
+  color: #2b6cb0;
+}
+
+.asignacion-loading,
+.asignacion-error {
+  text-align: center;
+  padding: 50px;
+  font-size: 1.2rem;
+}
+
+.asignacion-error {
+  color: #e53e3e;
+}
+
+/* ----- GESTIÓN DE EQUIPOS ----- */
+.gestion-equipos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+
+.gestion-equipos h3 {
+  margin-top: 0;
+  font-size: 1.2rem;
+  color: #2d3748;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 10px;
+}
+
+.ge-crear-grupo,
+.ge-gestion-miembros,
+.ge-lista-grupos {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  padding: 20px;
+}
+
+.ge-crear-grupo form {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.ge-crear-grupo input[type="text"] {
+  flex: 1;
+  min-width: 200px;
+  padding: 8px 12px;
+  border: 1px solid #cbd5e0;
+  border-radius: 4px;
+}
+
+.ge-crear-grupo input[type="color"] {
+  width: 40px;
+  height: 40px;
+  padding: 2px;
+  border: 1px solid #cbd5e0;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.ge-crear-grupo button,
+.ge-selectors button {
+  padding: 8px 16px;
+  background: #3182ce;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.ge-crear-grupo button:hover,
+.ge-selectors button:hover {
+  background: #2b6cb0;
+}
+
+.ge-selectors {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.ge-selectors select {
+  padding: 8px 12px;
+  border: 1px solid #cbd5e0;
+  border-radius: 4px;
+  background: white;
+}
+
+.ge-selectors select[multiple] {
+  height: 120px;
+}
+
+.ge-miembros-lista {
+  margin-top: 20px;
+}
+
+.ge-miembros-lista h4 {
+  margin: 0 0 10px 0;
+  color: #2d3748;
+}
+
+.ge-miembros-lista ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ge-miembros-lista li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 10px;
+  border-bottom: 1px solid #edf2f7;
+}
+
+.ge-miembros-lista li .btn-quitar {
+  background: #fc8181;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  font-size: 14px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.ge-miembros-lista li .btn-quitar:hover {
+  background: #e53e3e;
+}
+
+.ge-lista-grupos ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ge-lista-grupos li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  border-left: 5px solid #ccc;
+  background: #f7fafc;
+  border-radius: 4px;
+}
+
+.ge-grupo-nombre {
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.ge-grupo-miembros {
+  font-size: 0.9rem;
+  color: #718096;
+}
+
+/* ----- ASIGNAR TAREA ----- */
+.asignar-tarea {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  padding: 30px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.asignar-tarea form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.at-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.at-campo label {
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.at-campo input,
+.at-campo select,
+.at-campo textarea {
+  padding: 10px 14px;
+  border: 1px solid #cbd5e0;
+  border-radius: 4px;
+  font-size: 1rem;
+  background: white;
+}
+
+.at-campo textarea {
+  resize: vertical;
+  font-family: inherit;
+}
+
+.at-campo small {
+  color: #718096;
+  font-size: 0.85rem;
+  margin-top: 4px;
+}
+
+.asignar-tarea button[type="submit"] {
+  padding: 12px 24px;
+  background: #38a169;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  align-self: flex-start;
+}
+
+.asignar-tarea button[type="submit"]:hover {
+  background: #2f855a;
+}
+
+.asignar-tarea button[type="submit"]:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.at-mensaje {
+  margin-top: 10px;
+  font-weight: 600;
+  padding: 8px 12px;
+  border-radius: 4px;
+}
+
+.at-mensaje:contains('✅') {
+  background: #f0fff4;
+  color: #22543d;
+}
+
+.at-mensaje:contains('❌') {
+  background: #fff5f5;
+  color: #9b2c2c;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .gestion-equipos {
+    grid-template-columns: 1fr;
+  }
+}

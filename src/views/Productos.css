@@ -1,0 +1,358 @@
+/* Contenedor principal */
+.productos-container {
+  padding: 20px 0;
+  width: 100%;
+}
+
+/* Cabecera */
+.productos-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+  background: white;
+  padding: 16px 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.productos-title-section {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.productos-title-section h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #0a2a4a;
+  margin: 0;
+}
+
+.productos-count {
+  font-size: 0.9rem;
+  color: #6c757d;
+  background: #f1f3f5;
+  padding: 2px 12px;
+  border-radius: 20px;
+}
+
+.productos-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.productos-search {
+  position: relative;
+}
+
+.productos-search-input {
+  padding: 8px 16px;
+  border: 1px solid #dee2e6;
+  border-radius: 30px;
+  font-size: 0.95rem;
+  min-width: 260px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  background: #f8f9fa;
+}
+
+.productos-search-input:focus {
+  outline: none;
+  border-color: #1a5276;
+  box-shadow: 0 0 0 3px rgba(26, 82, 118, 0.15);
+  background: white;
+}
+
+.productos-btn-nuevo {
+  background: #1a5276;
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  white-space: nowrap;
+}
+
+.productos-btn-nuevo:hover {
+  background: #0a2a4a;
+  transform: scale(1.02);
+}
+
+/* Estado vacío / carga */
+.productos-loading,
+.productos-empty {
+  text-align: center;
+  padding: 60px 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  color: #6c757d;
+  font-size: 1.1rem;
+}
+
+/* Tabla */
+.productos-table-wrapper {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  overflow-x: auto;
+  padding: 4px 0;
+  margin-bottom: 20px;
+}
+
+.productos-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.productos-table thead {
+  background: #f8fafc;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.productos-table th {
+  padding: 14px 16px;
+  text-align: left;
+  font-weight: 600;
+  color: #1a3a5a;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.3px;
+}
+
+.productos-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #f1f3f5;
+  vertical-align: middle;
+}
+
+.productos-table tbody tr {
+  transition: background 0.15s;
+}
+
+.productos-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+/* Animación de entrada para filas (fade-in) */
+.productos-fila {
+  animation: fadeInRow 0.3s ease forwards;
+  opacity: 0;
+}
+
+@keyframes fadeInRow {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Imagen */
+.productos-img {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid #e9ecef;
+  background: #f8f9fa;
+}
+
+.productos-no-img {
+  color: #adb5bd;
+  font-size: 0.8rem;
+  background: #f1f3f5;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+/* Acciones (botones) */
+.productos-acciones {
+  display: flex;
+  gap: 6px;
+}
+
+.productos-btn-editar,
+.productos-btn-eliminar {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: 6px;
+  transition: background 0.2s, color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.productos-btn-editar {
+  color: #007bff;
+}
+
+.productos-btn-editar:hover {
+  background: #e3f0ff;
+  color: #0056b3;
+}
+
+.productos-btn-eliminar {
+  color: #dc3545;
+}
+
+.productos-btn-eliminar:hover {
+  background: #ffe3e6;
+  color: #c82333;
+}
+
+/* ======= PAGINACIÓN ======= */
+.productos-paginacion {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 12px 0;
+  background: transparent;
+}
+
+.productos-paginacion-info {
+  font-size: 0.95rem;
+  color: #495057;
+}
+
+.productos-paginacion-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Selector de cantidad */
+.productos-paginacion-selector {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: 12px;
+}
+
+.productos-paginacion-selector label {
+  font-size: 0.9rem;
+  color: #495057;
+}
+
+.productos-paginacion-selector select {
+  padding: 4px 8px;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  background: white;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.productos-paginacion-selector select:hover {
+  border-color: #1a5276;
+}
+
+/* Botones de página */
+.productos-paginacion-btn {
+  background: white;
+  border: 1px solid #dee2e6;
+  color: #1a3a5a;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  min-width: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.productos-paginacion-btn:hover:not(:disabled) {
+  background: #e9ecef;
+  border-color: #adb5bd;
+}
+
+.productos-paginacion-btn.active {
+  background: #1a5276;
+  border-color: #1a5276;
+  color: white;
+  box-shadow: 0 2px 4px rgba(26, 82, 118, 0.3);
+  transform: scale(1.05);
+}
+
+.productos-paginacion-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Animación sutil al cambiar de página (se aplica al wrapper de la tabla) */
+.productos-table-wrapper {
+  transition: opacity 0.25s ease;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .productos-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .productos-title-section {
+    justify-content: space-between;
+  }
+
+  .productos-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .productos-search-input {
+    min-width: auto;
+    width: 100%;
+  }
+
+  .productos-btn-nuevo {
+    width: 100%;
+    text-align: center;
+  }
+
+  .productos-table th,
+  .productos-table td {
+    padding: 10px 8px;
+    font-size: 0.85rem;
+  }
+
+  .productos-img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .productos-paginacion {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .productos-paginacion-controls {
+    justify-content: center;
+  }
+
+  .productos-paginacion-info {
+    text-align: center;
+  }
+}

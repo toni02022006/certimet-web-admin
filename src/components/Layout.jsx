@@ -22,12 +22,14 @@ const icons = {
   chevronLeft: 'M15 18l-6-6 6-6',
   asignacion: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z',
   calendario: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z',
+  pedidos: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012-2m-6 9l2 2 4-4',
 };
 
 // 💡 Configuración con los nombres exactos de tus módulos en la Base de Datos
 const NAV_ITEMS = [
   { to: '/dashboard', label: 'Dashboard', icon: icons.dashboard, roles: ['Superadmin', 'Admin'], modulo: 'Dashboard' },
   { to: '/inicio', label: 'Inicio (Mis Tareas)', icon: icons.inicio, roles: ['*'], modulo: 'Inicio' },
+  { to: '/gestion-pedidos', label: 'Gestión de Pedidos', icon: icons.pedidos, roles: ['Superadmin', 'Admin'], modulo: 'Gestión de Pedidos' },
   { to: '/calendario', label: 'Calendario', icon: icons.calendario, roles: ['*'], modulo: 'Calendario' }, // NUEVO
   { to: '/seguimiento-admin', label: 'Seguimiento (Admin)', icon: icons.seguimientoAdmin, roles: ['Superadmin', 'Admin'], modulo: 'Seguimiento (Admin)' },
   { to: '/asignacion', label: 'Asignación de Tareas', icon: icons.asignacion, roles: ['Superadmin', 'Admin'], modulo: 'Asignación de Tareas' },

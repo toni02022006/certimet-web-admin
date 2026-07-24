@@ -17,6 +17,7 @@ import AsignacionAdmin from './views/AsignacionAdmin'; // 👈 NUEVA
 import RutaSegura from './components/RutaSegura';
 import Calendario from './views/Calendario';
 import NotificacionGlobal from './utils/NotificacionGlobal';    
+import GestionPedidos from './views/GestionPedidos';
 
 // Guardián de rutas (requiere token)
 const RutaProtegida = ({ children }) => {
@@ -64,6 +65,7 @@ function App() {
               <Route path="productos" element={<Productos />} />
               <Route path="productos/nuevo" element={<ProductoFormPage />} />
               <Route path="productos/editar/:id" element={<ProductoFormPage />} />
+              <Route path="gestion-pedidos" element={<GestionPedidos />} />
               
               {/* 👇 NUEVA RUTA PARA ASIGNACIÓN */}
               <Route path="asignacion" element={<AsignacionAdmin />} />

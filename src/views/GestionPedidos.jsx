@@ -2,6 +2,11 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './GestionPedidos.css';
 
+const ESTADOS_VALIDOS = [
+  'PENDIENTE', 'PAGADO', 'EN_PREPARACION',
+  'DESPACHADO', 'EN_TRANSITO', 'EN_REPARTO', 'ENTREGADO', 'CANCELADO'
+];
+
 const GestionPedidos = () => {
   const [pedidos, setPedidos] = useState([]);
   const [filtroEstado, setFiltroEstado] = useState('TODOS');
@@ -45,7 +50,7 @@ const GestionPedidos = () => {
       if (pedidoSeleccionado && pedidoSeleccionado.id === idPedido) {
         setPedidoSeleccionado({ ...pedidoSeleccionado, estado_pedido: nuevoEstado });
       }
-      alert(`Estado actualizado exitosamente a ${nuevoEstado}`);
+      alert(`Estado actualizado exitosamente a ${nuevoEstado.replace('_', ' ')}`);
     } catch (err) {
       console.error('Error al actualizar estado:', err);
       alert('Hubo un error al actualizar el estado del pedido.');
@@ -69,7 +74,7 @@ const GestionPedidos = () => {
     <div className="gp-container">
       <div className="gp-header-section">
         <h2>Gestión y Administración de Pedidos</h2>
-        <p>Administra los pedidos de invitados (cotizaciones) y usuarios registrados para validar pagos y stock.</p>
+        <p>Administra los pedidos de invitados (cotizaciones) y usuarios registrados para validar pagos y actualizar el seguimiento.</p>
       </div>
 
       {/* Filtros y Buscador */}
@@ -86,7 +91,7 @@ const GestionPedidos = () => {
           <button className={filtroEstado === 'TODOS' ? 'active' : ''} onClick={() => setFiltroEstado('TODOS')}>Todos</button>
           <button className={filtroEstado === 'PENDIENTE' ? 'active' : ''} onClick={() => setFiltroEstado('PENDIENTE')}>Pendientes</button>
           <button className={filtroEstado === 'PAGADO' ? 'active' : ''} onClick={() => setFiltroEstado('PAGADO')}>Pagados</button>
-          <button className={filtroEstado === 'RECHAZADO' ? 'active' : ''} onClick={() => setFiltroEstado('RECHAZADO')}>Rechazados</button>
+          <button className={filtroEstado === 'EN_TRANSITO' ? 'active' : ''} onClick={() => setFiltroEstado('EN_TRANSITO')}>En Tránsito</button>
         </div>
       </div>
 
@@ -107,7 +112,7 @@ const GestionPedidos = () => {
                 <th>Tipo / Contacto</th>
                 <th>Método Pago</th>
                 <th>Total</th>
-                <th>Estado</th>
+                <th>Estado de Envío</th>
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -130,9 +135,18 @@ const GestionPedidos = () => {
                   <td>{pedido.metodo_pago || 'Contra Entrega / Cotización'}</td>
                   <td><strong>S/ {Number(pedido.total).toFixed(2)}</strong></td>
                   <td>
-                    <span className={`gp-badge ${pedido.estado_pedido?.toLowerCase()}`}>
-                      {pedido.estado_pedido}
-                    </span>
+                    {/* ✅ SELECTOR INTERACTIVO DE ESTADO */}
+                    <select 
+                      className={`gp-status-select ${pedido.estado_pedido?.toLowerCase()}`}
+                      value={pedido.estado_pedido}
+                      onChange={(e) => cambiarEstadoPedido(pedido.id, e.target.value)}
+                    >
+                      {ESTADOS_VALIDOS.map(estado => (
+                        <option key={estado} value={estado}>
+                          {estado.replace('_', ' ')}
+                        </option>
+                      ))}
+                    </select>
                   </td>
                   <td>
                     <div className="gp-actions">
@@ -143,19 +157,20 @@ const GestionPedidos = () => {
                       >
                         Ver Detalle
                       </button>
+                      {/* Mantengo los botones rápidos solo si está PENDIENTE */}
                       {pedido.estado_pedido === 'PENDIENTE' && (
                         <>
                           <button 
                             className="gp-btn-success" 
                             onClick={() => cambiarEstadoPedido(pedido.id, 'PAGADO')}
-                            title="Confirmar Pago y Bajar Stock"
+                            title="Confirmar Pago"
                           >
                             Aprobar Pago
                           </button>
                           <button 
                             className="gp-btn-danger" 
-                            onClick={() => cambiarEstadoPedido(pedido.id, 'RECHAZADO')}
-                            title="Rechazar pedido"
+                            onClick={() => cambiarEstadoPedido(pedido.id, 'CANCELADO')}
+                            title="Cancelar pedido"
                           >
                             Rechazar
                           </button>
@@ -199,30 +214,23 @@ const GestionPedidos = () => {
                   <p><strong>Dirección:</strong> {pedidoSeleccionado.direccion_envio_texto || 'No especificada'}</p>
                   <p><strong>Ciudad / Distrito:</strong> {pedidoSeleccionado.ciudad || 'Lima'}</p>
                   <p><strong>Método de Pago:</strong> {pedidoSeleccionado.metodo_pago}</p>
-                  <p><strong>Estado Actual:</strong> <span className={`gp-badge ${pedidoSeleccionado.estado_pedido?.toLowerCase()}`}>{pedidoSeleccionado.estado_pedido}</span></p>
+                  <p>
+                    <strong>Estado Actual:</strong> 
+                    {/* Selector también disponible dentro del modal */}
+                    <select 
+                      className={`gp-status-select modal-select ${pedidoSeleccionado.estado_pedido?.toLowerCase()}`}
+                      value={pedidoSeleccionado.estado_pedido}
+                      onChange={(e) => cambiarEstadoPedido(pedidoSeleccionado.id, e.target.value)}
+                    >
+                      {ESTADOS_VALIDOS.map(estado => (
+                        <option key={estado} value={estado}>{estado.replace('_', ' ')}</option>
+                      ))}
+                    </select>
+                  </p>
                   <p><strong>Subtotal:</strong> S/ {Number(pedidoSeleccionado.subtotal || 0).toFixed(2)}</p>
                   <p><strong>IGV (18%):</strong> S/ {Number(pedidoSeleccionado.igv_total || 0).toFixed(2)}</p>
                   <p className="gp-total-modal"><strong>Total a Pagar:</strong> S/ {Number(pedidoSeleccionado.total || 0).toFixed(2)}</p>
                 </div>
-              </div>
-
-              <div className="gp-modal-actions-bar">
-                {pedidoSeleccionado.estado_pedido === 'PENDIENTE' && (
-                  <>
-                    <button 
-                      className="gp-btn-success gp-btn-large" 
-                      onClick={() => cambiarEstadoPedido(pedidoSeleccionado.id, 'PAGADO')}
-                    >
-                      Confirmar Pago (Aprobar)
-                    </button>
-                    <button 
-                      className="gp-btn-danger gp-btn-large" 
-                      onClick={() => cambiarEstadoPedido(pedidoSeleccionado.id, 'RECHAZADO')}
-                    >
-                      Rechazar Pedido
-                    </button>
-                  </>
-                )}
               </div>
             </div>
           </div>

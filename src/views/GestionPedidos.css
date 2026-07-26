@@ -52,7 +52,7 @@
   color: #475569;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 0.85srem;
+  font-size: 0.85rem;
   font-weight: 500;
   transition: all 0.2s;
 }
@@ -116,29 +116,42 @@
   color: #64748b;
 }
 
-.gp-badge {
-  padding: 0.25rem 0.6rem;
+/* ✅ Estilos para el nuevo SELECT de estados */
+.gp-status-select {
+  padding: 0.35rem 1.6rem 0.35rem 0.8rem;
   border-radius: 9999px;
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
-  display: inline-block;
+  cursor: pointer;
+  border: 1px solid transparent;
+  outline: none;
+  appearance: none; 
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23333%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.6rem top 50%;
+  background-size: 0.6rem auto;
+  transition: all 0.2s ease;
 }
 
-.gp-badge.pendiente {
-  background-color: #fef3c7;
-  color: #d97706;
+.gp-status-select:hover {
+  filter: brightness(0.95);
 }
 
-.gp-badge.pagado {
-  background-color: #dcfce7;
-  color: #16a34a;
+.gp-status-select.modal-select {
+  margin-left: 10px;
 }
 
-.gp-badge.rechazado {
-  background-color: #fee2e2;
-  color: #dc2626;
-}
+/* Colores por estado para que coincidan con tu timeline */
+.gp-status-select.pendiente { background-color: #fef3c7; color: #d97706; border-color: #fde68a; }
+.gp-status-select.pagado { background-color: #dcfce7; color: #16a34a; border-color: #bbf7d0; }
+.gp-status-select.en_preparacion { background-color: #e0e7ff; color: #4f46e5; border-color: #c7d2fe; }
+.gp-status-select.enviado { background-color: #dbeafe; color: #2563eb; border-color: #bfdbfe; }
+.gp-status-select.despachado { background-color: #f3e8ff; color: #9333ea; border-color: #e9d5ff; }
+.gp-status-select.en_transito { background-color: #fae8ff; color: #c026d3; border-color: #f5d0fe; }
+.gp-status-select.en_reparto { background-color: #ffedd5; color: #ea580c; border-color: #fed7aa; }
+.gp-status-select.entregado { background-color: #ccfbf1; color: #0d9488; border-color: #99f6e4; }
+.gp-status-select.cancelado, .gp-status-select.rechazado { background-color: #fee2e2; color: #dc2626; border-color: #fecaca; }
 
 .gp-actions {
   display: flex;
@@ -256,6 +269,8 @@
   margin: 0.3rem 0;
   font-size: 0.85rem;
   color: #475569;
+  display: flex;
+  align-items: center;
 }
 
 .gp-total-modal {
@@ -270,9 +285,4 @@
   justify-content: flex-end;
   border-top: 1px solid #e2e8f0;
   padding-top: 1rem;
-}
-
-.gp-btn-large {
-  padding: 0.6rem 1.2rem;
-  font-size: 0.9rem;
 }

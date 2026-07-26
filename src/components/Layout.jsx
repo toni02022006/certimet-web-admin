@@ -25,12 +25,11 @@ const icons = {
   pedidos: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012-2m-6 9l2 2 4-4',
 };
 
-// 💡 Configuración con los nombres exactos de tus módulos en la Base de Datos
 const NAV_ITEMS = [
   { to: '/dashboard', label: 'Dashboard', icon: icons.dashboard, roles: ['Superadmin', 'Admin'], modulo: 'Dashboard' },
   { to: '/inicio', label: 'Inicio (Mis Tareas)', icon: icons.inicio, roles: ['*'], modulo: 'Inicio' },
   { to: '/gestion-pedidos', label: 'Gestión de Pedidos', icon: icons.pedidos, roles: ['Superadmin', 'Admin'], modulo: 'Gestión de Pedidos' },
-  { to: '/calendario', label: 'Calendario', icon: icons.calendario, roles: ['*'], modulo: 'Calendario' }, // NUEVO
+  { to: '/calendario', label: 'Calendario', icon: icons.calendario, roles: ['*'], modulo: 'Calendario' },
   { to: '/seguimiento-admin', label: 'Seguimiento (Admin)', icon: icons.seguimientoAdmin, roles: ['Superadmin', 'Admin'], modulo: 'Seguimiento (Admin)' },
   { to: '/asignacion', label: 'Asignación de Tareas', icon: icons.asignacion, roles: ['Superadmin', 'Admin'], modulo: 'Asignación de Tareas' },
   { to: '/seguimiento-super', label: 'Seguimiento (Super)', icon: icons.seguimientoSuper, roles: ['Superadmin'], modulo: 'Seguimiento (Super)' },
@@ -55,15 +54,28 @@ const Layout = () => {
   const esAdmin = usuario?.rol === 'Superadmin' || usuario?.rol === 'Admin';
   const esSuper = usuario?.rol === 'Superadmin';
 
-  // 💡 Lógica que evalúa el rol de administración O los módulos asignados de la BD
+  // ✅ SOLUCIÓN: Lógica robusta que soporta strings planos u objetos anidados de Prisma
   const canSee = (item) => {
     if (item.roles.includes('*')) return true;
     if (item.roles.includes('Superadmin') && esSuper) return true;
     if (item.roles.includes('Admin') && esAdmin) return true;
     
-    // Si no es admin pero tiene el módulo habilitado individualmente en sus permisos de BD:
-    if (usuario?.modulos && usuario.modulos.includes(item.modulo)) {
-      return true;
+    // Verificación de módulos individual
+    if (usuario?.modulos && Array.isArray(usuario.modulos)) {
+      const tieneModulo = usuario.modulos.some(m => {
+        // Caso 1: Array de strings (ej: ['Gestión de Pedidos'])
+        if (typeof m === 'string') return m === item.modulo;
+        
+        // Caso 2: Objeto anidado directo de Prisma (ej: { modulo: { nombre: 'Gestión de Pedidos' } })
+        if (m.modulo?.nombre) return m.modulo.nombre === item.modulo;
+        
+        // Caso 3: Objeto aplanado (ej: { id: 10, nombre: 'Gestión de Pedidos' })
+        if (m.nombre) return m.nombre === item.modulo;
+        
+        return false;
+      });
+
+      if (tieneModulo) return true;
     }
 
     return false;

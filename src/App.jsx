@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { AuthProvider, AuthContext } from './context/AuthContext';
 
 // Layout y vistas
@@ -13,7 +13,7 @@ import ProductoFormPage from './views/ProductoFormPage';
 import Inicio from './views/Inicio';
 import SeguimientoAdmin from './views/SeguimientoAdmin';
 import SeguimientoSuper from './views/SeguimientoSuper';
-import AsignacionAdmin from './views/AsignacionAdmin'; // 👈 NUEVA
+import AsignacionAdmin from './views/AsignacionAdmin';
 import RutaSegura from './components/RutaSegura';
 import Calendario from './views/Calendario';
 import NotificacionGlobal from './utils/NotificacionGlobal';    
@@ -33,7 +33,42 @@ const RootRedirect = () => {
   return <Navigate to={esAdmin ? '/dashboard' : '/inicio'} replace />;
 };
 
+// ===============================================================
+// Función que genera un mensaje según la hora del día
+// ===============================================================
+const mensajeSalida = () => {
+  const hora = new Date().getHours();
+  if (hora < 12) return "Buenos días, ¡sigue gestionando! ☀️";
+  if (hora < 18) return "Buenas tardes, no abandones tu trabajo. 🌤️";
+  return "Buenas noches, un último esfuerzo. 🌙";
+};
+
 function App() {
+  // ==========================================================================
+  // EFECTO: Cambio de título cuando el usuario cambia de pestaña
+  // ==========================================================================
+  useEffect(() => {
+    const tituloOriginal = document.title;
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        // Mensaje dinámico según la hora del día
+        document.title = `${mensajeSalida()} | CERTIMET Admin`;
+      } else {
+        // Restaurar título original al volver
+        document.title = tituloOriginal;
+        // Opcional: pequeño saludo en consola (puedes eliminarlo)
+        console.log("✅ Bienvenido de vuelta, administrador.");
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, []);
+
   return (
     <AuthProvider>
       <Router>
@@ -66,8 +101,6 @@ function App() {
               <Route path="productos/nuevo" element={<ProductoFormPage />} />
               <Route path="productos/editar/:id" element={<ProductoFormPage />} />
               <Route path="gestion-pedidos" element={<GestionPedidos />} />
-              
-              {/* 👇 NUEVA RUTA PARA ASIGNACIÓN */}
               <Route path="asignacion" element={<AsignacionAdmin />} />
             </Route>
 

@@ -18,7 +18,7 @@ const Blog = () => {
 
   const fetchArticulos = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/blog');
+      const response = await fetch(import.meta.env.VITE_API_URL + '/api/blog');
       if (response.ok) {
         const data = await response.json();
         setArticulos(data);
@@ -51,7 +51,7 @@ const Blog = () => {
 
     if (result.isConfirmed) {
       try {
-        const response = await fetch(`http://localhost:3000/api/blog/${id}`, { method: 'DELETE' });
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/blog/${id}`, { method: 'DELETE' });
         if (response.ok) {
           Swal.fire('¡Eliminado!', 'El artículo ha sido eliminado.', 'success');
           fetchArticulos(); 

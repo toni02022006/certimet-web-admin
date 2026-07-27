@@ -19,7 +19,7 @@ const Usuarios = () => {
 
   const fetchUsuarios = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/usuarios');
+      const response = await fetch(import.meta.env.VITE_API_URL + '/api/usuarios');
       if (response.ok) setUsuarios(await response.json());
     } catch (error) {
       console.error('Error:', error);
@@ -28,7 +28,7 @@ const Usuarios = () => {
 
   const fetchRoles = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/roles');
+      const response = await fetch(import.meta.env.VITE_API_URL + '/api/roles');
       if (response.ok) setRoles(await response.json());
     } catch (error) {
       console.error('Error:', error);
@@ -37,7 +37,7 @@ const Usuarios = () => {
 
   const fetchModulos = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/modulos');
+      const response = await fetch(import.meta.env.VITE_API_URL + '/api/modulos');
       if (response.ok) setModulosDisponibles(await response.json());
     } catch (error) {
       console.error('Error:', error);
@@ -99,7 +99,7 @@ const Usuarios = () => {
 
     if (confirm.isConfirmed) {
       try {
-        const response = await fetch(`http://localhost:3000/api/usuarios/${id}`, { method: 'DELETE' });
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/usuarios/${id}`, { method: 'DELETE' });
         if (response.ok) {
           Swal.fire('Eliminado!', 'El usuario ha sido eliminado.', 'success');
           fetchUsuarios();
@@ -120,8 +120,8 @@ const Usuarios = () => {
 
     const payload = { ...formData, modulos_ids: modulosSeleccionados };
     const url = editandoId 
-      ? `http://localhost:3000/api/usuarios/${editandoId}` 
-      : 'http://localhost:3000/api/usuarios';
+      ? `${import.meta.env.VITE_API_URL}/api/usuarios/${editandoId}` 
+      : import.meta.env.VITE_API_URL + '/api/usuarios';
     const method = editandoId ? 'PUT' : 'POST';
 
     try {

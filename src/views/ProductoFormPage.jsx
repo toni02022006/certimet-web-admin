@@ -56,12 +56,12 @@ const ProductoFormPage = () => {
   useEffect(() => {
     const fetchCategoriasYMarcas = async () => {
       try {
-        const resCats = await fetch('http://localhost:3000/api/categorias');
+        const resCats = await fetch(import.meta.env.VITE_API_URL + '/api/categorias');
         if (resCats.ok) {
           const data = await resCats.json();
           setCategorias(data);
         }
-        const resMarcas = await fetch('http://localhost:3000/api/marcas');
+        const resMarcas = await fetch(import.meta.env.VITE_API_URL + '/api/marcas');
         if (resMarcas.ok) {
           const data = await resMarcas.json();
           setMarcas(data);
@@ -77,7 +77,7 @@ const ProductoFormPage = () => {
     if (!id || categorias.length === 0) return;
     const fetchProducto = async () => {
       try {
-        const res = await fetch(`http://localhost:3000/api/productos/${id}`);
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/productos/${id}`);
         if (res.ok) {
           const prod = await res.json();
           setFormData({
@@ -213,8 +213,8 @@ const ProductoFormPage = () => {
     }
 
     const url = id
-      ? `http://localhost:3000/api/productos/${id}`
-      : 'http://localhost:3000/api/productos';
+      ? `${import.meta.env.VITE_API_URL}/api/productos/${id}`
+      : import.meta.env.VITE_API_URL + '/api/productos';
     const method = id ? 'PUT' : 'POST';
 
     try {

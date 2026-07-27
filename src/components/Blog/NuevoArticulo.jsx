@@ -36,7 +36,7 @@ const NuevoArticulo = () => {
       setIsEditing(true);
       const fetchArticulo = async () => {
         try {
-          const response = await fetch(`http://localhost:3000/api/blog/${id}`);
+          const response = await fetch(`${import.meta.env.VITE_API_URL}/api/blog/${id}`);
           if (response.ok) {
             const data = await response.json();
             const fechaFormateada = data.fecha_publicacion 
@@ -167,7 +167,7 @@ const NuevoArticulo = () => {
       minutos_lectura: parseInt(formData.minutos_lectura) || 1
     };
 
-    const url = isEditing ? `http://localhost:3000/api/blog/${id}` : 'http://localhost:3000/api/blog';
+    const url = isEditing ? `${import.meta.env.VITE_API_URL}/api/blog/${id}` : import.meta.env.VITE_API_URL + '/api/blog';
     const method = isEditing ? 'PUT' : 'POST';
 
     try {

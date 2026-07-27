@@ -43,7 +43,7 @@ const Productos = () => {
   const fetchProductos = async () => {
     setCargando(true);
     try {
-      const response = await fetch('http://localhost:3000/api/productos');
+      const response = await fetch(import.meta.env.VITE_API_URL + '/api/productos');
       if (response.ok) {
         const data = await response.json();
         setProductos(data);
@@ -101,7 +101,7 @@ const Productos = () => {
 
     if (confirm.isConfirmed) {
       try {
-        const res = await fetch(`http://localhost:3000/api/productos/${id}`, { method: 'DELETE' });
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/productos/${id}`, { method: 'DELETE' });
         if (res.ok) {
           Swal.fire('Eliminado', 'El producto ha sido eliminado.', 'success');
           fetchProductos();

@@ -1,0 +1,32 @@
+name: Deploy Admin Frontend to cPanel
+
+on:
+  push:
+    branches:
+      - test  # Cambia esto si tu rama principal es otra
+
+jobs:
+  web-deploy:
+    name: 🎉 Deploy Admin
+    runs-on: ubuntu-latest
+    steps:
+    - name: 🚚 Obtener el código
+      uses: actions/checkout@v4
+
+    - name: 📦 Configurar Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+
+    - name: 🔨 Instalar dependencias y Compilar (Build)
+      run: |
+        npm install
+        npm run build
+
+    - name: 📂 Sincronizar archivos por FTP
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      with:
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        local-dir: ./dist/ # ¡Súper importante! Solo subimos la carpeta compilada

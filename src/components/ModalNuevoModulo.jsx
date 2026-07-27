@@ -10,7 +10,7 @@ export default function ModalNuevoModulo({ onClose, onModuloCreado }) {
 
     try {
       // Ajusta la URL a tu puerto del backend (ej. 3000) o a producción si ya está subido
-      const response = await fetch('http://localhost:3000/api/modulos', {
+      const response = await fetch(import.meta.env.VITE_API_URL + '/api/modulos', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ nombre })

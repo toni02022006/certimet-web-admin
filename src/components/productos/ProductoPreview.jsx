@@ -37,7 +37,7 @@ const ProductoPreview = ({
     especificaciones: false
   });
 
-  const urlBase = 'http://localhost:3000';
+  const urlBase = import.meta.env.VITE_API_URL;
   const imagenPrincipal = imagenPreview || null;
   
   const todasLasImagenes = [

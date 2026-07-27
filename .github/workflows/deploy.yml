@@ -25,8 +25,12 @@ jobs:
 
     - name: 📂 Sincronizar archivos por FTP
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      env:
+        # Esto soluciona la advertencia de Node 20 permitiendo su uso temporal
+        ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
       with:
         server: ${{ secrets.FTP_SERVER }}
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
-        local-dir: ./dist/ # ¡Súper importante! Solo subimos la carpeta compilada
+        local-dir: ./dist/
+        port: 21 # Forzamos explícitamente el uso del puerto FTP estándar

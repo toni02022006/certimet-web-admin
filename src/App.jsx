@@ -18,6 +18,7 @@ import RutaSegura from './components/RutaSegura';
 import Calendario from './views/Calendario';
 import NotificacionGlobal from './utils/NotificacionGlobal';    
 import GestionPedidos from './views/GestionPedidos';
+import NuevoArticulo from './components/Blog/NuevoArticulo';
 
 // Guardián de rutas (requiere token)
 const RutaProtegida = ({ children }) => {
@@ -97,6 +98,8 @@ function App() {
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="seguimiento-admin" element={<SeguimientoAdmin />} />
               <Route path="blog" element={<Blog />} />
+              <Route path="/admin/blog/nuevo" element={<NuevoArticulo />} />
+              <Route path="/admin/blog/editar/:id" element={<NuevoArticulo />} />
               <Route path="productos" element={<Productos />} />
               <Route path="productos/nuevo" element={<ProductoFormPage />} />
               <Route path="productos/editar/:id" element={<ProductoFormPage />} />

@@ -1,0 +1,236 @@
+/* ==========================================================================
+   ESTILOS DE VISTA PREVIA - ARTICULO PREVIEW (Basado en ArticuloDetalle.css)
+   ========================================================================== */
+
+.articulo-elegante-page.preview-mode {
+  background-color: #ffffff;
+  min-height: auto;
+  font-family: system-ui, -apple-system, sans-serif;
+  color: #1e293b;
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+/* --- BARRA DE PROGRESO DE LECTURA --- */
+.articulo-elegante-page.preview-mode .barra-progreso-lectura {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background-color: #00d639;
+  z-index: 10;
+  box-shadow: 0 2px 10px rgba(0, 214, 57, 0.4);
+}
+
+/* 1. HEADER COMPACTO */
+.articulo-elegante-page.preview-mode .header-compacto {
+  background: linear-gradient(135deg, #00234a 0%, #003b7a 100%);
+  padding: 40px 20px 30px;
+  color: #ffffff;
+}
+
+.articulo-elegante-page.preview-mode .header-limite {
+  max-width: 1000px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.articulo-elegante-page.preview-mode .link-retorno {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #94a3b8;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-bottom: 15px;
+}
+
+.articulo-elegante-page.preview-mode .header-textos {
+  text-align: left;
+}
+
+.articulo-elegante-page.preview-mode .etiqueta-categoria {
+  display: inline-block;
+  background-color: #00d639;
+  color: #00234a;
+  padding: 3px 12px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+  box-shadow: 0 4px 12px rgba(0, 214, 57, 0.15);
+}
+
+.articulo-elegante-page.preview-mode .titulo-principal {
+  font-size: 1.6rem;
+  font-weight: 600;
+  line-height: 1.25;
+  margin: 0 0 10px 0;
+  color: #ffffff;
+}
+
+.articulo-elegante-page.preview-mode .subtitulo-header {
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: #cbd5e1;
+  margin: 0 0 18px 0;
+  max-width: 800px;
+}
+
+.articulo-elegante-page.preview-mode .fila-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 0.8rem;
+  color: #e2e8f0;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  padding-top: 12px;
+}
+
+.articulo-elegante-page.preview-mode .meta-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 400;
+}
+
+.articulo-elegante-page.preview-mode .icono-meta {
+  font-size: 0.9rem;
+}
+
+.articulo-elegante-page.preview-mode .punto-separador {
+  color: #475569;
+  font-size: 1rem;
+}
+
+/* 2. CUERPO ANCHO */
+.articulo-elegante-page.preview-mode .cuerpo-ancho {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 20px 40px;
+}
+
+/* 3. IMAGEN */
+.articulo-elegante-page.preview-mode .marco-imagen {
+  width: 100%;
+  max-width: 900px;
+  margin: -25px auto 25px auto;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+  position: relative;
+  z-index: 5;
+}
+
+.articulo-elegante-page.preview-mode .mascara-hover {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.articulo-elegante-page.preview-mode .imagen-proporcional {
+  width: 100%;
+  height: auto;
+  max-height: 320px;
+  object-fit: cover;
+  display: block;
+}
+
+.placeholder-imagen-box {
+  height: 220px;
+  background-color: #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+.placeholder-inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 4. CONTENEDOR DEL TEXTO */
+.articulo-elegante-page.preview-mode .contenedor-texto-amplio {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.articulo-elegante-page.preview-mode .quill-contenido-limpio {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #334155;
+  font-weight: 400;
+  word-wrap: break-word;
+}
+
+.articulo-elegante-page.preview-mode .quill-contenido-limpio h2 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #00234a;
+  margin: 25px 0 10px 0;
+}
+
+.articulo-elegante-page.preview-mode .quill-contenido-limpio h3 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #003b7a;
+  margin: 18px 0 8px 0;
+}
+
+.articulo-elegante-page.preview-mode .quill-contenido-limpio p {
+  margin-bottom: 15px;
+}
+
+.articulo-elegante-page.preview-mode .quill-contenido-limpio ul, 
+.articulo-elegante-page.preview-mode .quill-contenido-limpio ol {
+  margin-bottom: 15px;
+  padding-left: 20px;
+}
+
+.articulo-elegante-page.preview-mode .quill-contenido-limpio li {
+  margin-bottom: 5px;
+}
+
+.articulo-elegante-page.preview-mode .quill-contenido-limpio img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  margin: 15px 0;
+  border: 1px solid #e2e8f0;
+}
+
+.preview-contenido-placeholder {
+  color: #94a3b8;
+  font-style: italic;
+}
+
+/* 5. FOOTER FINAL */
+.articulo-elegante-page.preview-mode .footer-sencillo {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #e2e8f0;
+  text-align: left;
+}
+
+.articulo-elegante-page.preview-mode .boton-verde-final {
+  display: inline-block;
+  padding: 10px 22px;
+  background-color: transparent;
+  color: #00234a;
+  border: 2px solid #00d639;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.85rem;
+}

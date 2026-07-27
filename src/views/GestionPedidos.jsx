@@ -15,6 +15,11 @@ const GestionPedidos = () => {
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
 
+  // Paginación
+  const [paginaActual, setPaginaActual] = useState(1);
+  const [filasPorPagina, setFilasPorPagina] = useState(10);
+  const [paginaInput, setPaginaInput] = useState('');
+
   const token = localStorage.getItem('token') || sessionStorage.getItem('token');
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
@@ -44,42 +49,114 @@ const GestionPedidos = () => {
         { estado_pedido: nuevoEstado },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      
-      // Actualizar localmente
       setPedidos(pedidos.map(p => p.id === idPedido ? { ...p, estado_pedido: nuevoEstado } : p));
       if (pedidoSeleccionado && pedidoSeleccionado.id === idPedido) {
         setPedidoSeleccionado({ ...pedidoSeleccionado, estado_pedido: nuevoEstado });
       }
-      alert(`Estado actualizado exitosamente a ${nuevoEstado.replace('_', ' ')}`);
     } catch (err) {
       console.error('Error al actualizar estado:', err);
       alert('Hubo un error al actualizar el estado del pedido.');
     }
   };
 
+  // Estadísticas
+  const totalPedidos = pedidos.length;
+  const pendientes = pedidos.filter(p => p.estado_pedido === 'PENDIENTE').length;
+  const pagados = pedidos.filter(p => p.estado_pedido === 'PAGADO').length;
+  const enTransito = pedidos.filter(p => p.estado_pedido === 'EN_TRANSITO').length;
+  const entregados = pedidos.filter(p => p.estado_pedido === 'ENTREGADO').length;
+
+  // Filtrado
   const pedidosFiltrados = pedidos.filter(pedido => {
     const cumpleEstado = filtroEstado === 'TODOS' || pedido.estado_pedido === filtroEstado;
     const textoBusqueda = busqueda.toLowerCase();
     const clienteNombre = `${pedido.cliente_nombres || ''} ${pedido.cliente_apellidos || ''}`.toLowerCase();
     const documento = (pedido.numero_documento || '').toLowerCase();
     const idPedidoStr = String(pedido.id);
-
     const cumpleBusqueda = clienteNombre.includes(textoBusqueda) || 
                            documento.includes(textoBusqueda) || 
                            idPedidoStr.includes(textoBusqueda);
     return cumpleEstado && cumpleBusqueda;
   });
 
+  // Paginación
+  const indexUltimo = paginaActual * filasPorPagina;
+  const indexPrimero = indexUltimo - filasPorPagina;
+  const pedidosPaginados = pedidosFiltrados.slice(indexPrimero, indexUltimo);
+  const totalPaginas = Math.ceil(pedidosFiltrados.length / filasPorPagina);
+
+  const cambiarPagina = (numero) => {
+    if (numero >= 1 && numero <= totalPaginas) {
+      setPaginaActual(numero);
+      setPaginaInput('');
+    }
+  };
+
+  const irPaginaInput = (e) => {
+    e.preventDefault();
+    const num = parseInt(paginaInput);
+    if (!isNaN(num) && num >= 1 && num <= totalPaginas) {
+      cambiarPagina(num);
+    } else {
+      setPaginaInput('');
+    }
+  };
+
+  useEffect(() => {
+    setPaginaActual(1);
+  }, [filtroEstado, busqueda, filasPorPagina]);
+
+  const getRangoPaginas = () => {
+    const delta = 3;
+    const rango = [];
+    const inicio = Math.max(1, paginaActual - delta);
+    const fin = Math.min(totalPaginas, paginaActual + delta);
+    for (let i = inicio; i <= fin; i++) {
+      rango.push(i);
+    }
+    return rango;
+  };
+
+  // Función para mostrar productos con tooltip
+  const renderProductos = (pedido) => {
+    const detalles = pedido.detalles || [];
+    if (!detalles || detalles.length === 0) {
+      return <span className="gp-sin-productos">Sin productos</span>;
+    }
+    return detalles.map((item, idx) => {
+      const nombre = item.producto?.nombre || 'Producto';
+      const cantidad = item.cantidad || 1;
+      return (
+        <div key={idx} className="gp-producto-item">
+          <span className="gp-producto-nombre" title={nombre}>
+            {nombre}
+          </span>
+          <span className="gp-producto-cantidad">×{cantidad}</span>
+        </div>
+      );
+    });
+  };
+
   return (
     <div className="gp-container">
-      <div className="gp-header-section">
-        <h2>Gestión y Administración de Pedidos</h2>
-        <p>Administra los pedidos de invitados (cotizaciones) y usuarios registrados para validar pagos y actualizar el seguimiento.</p>
+      {/* Cabecera con estadísticas */}
+      <div className="gp-header">
+        <div className="gp-header-left">
+          <h1>Gestión de Pedidos</h1>
+          <p>Administra y actualiza el estado de todos los pedidos</p>
+        </div>
+        <div className="gp-stats">
+          <div className="gp-stat-item"><span>Total</span><strong>{totalPedidos}</strong></div>
+          <div className="gp-stat-item"><span>Pendientes</span><strong>{pendientes}</strong></div>
+          <div className="gp-stat-item"><span>Pagados</span><strong>{pagados}</strong></div>
+          <div className="gp-stat-item"><span>En tránsito</span><strong>{enTransito}</strong></div>
+          <div className="gp-stat-item"><span>Entregados</span><strong>{entregados}</strong></div>
+        </div>
       </div>
 
-      {/* Filtros y Buscador */}
+      {/* Barra de filtros */}
       <div className="gp-filters-bar">
-        <div className="gp-search-box">
+        <div className="gp-search-wrapper">
           <input 
             type="text" 
             placeholder="Buscar por ID, cliente o DNI/RUC..." 
@@ -88,20 +165,34 @@ const GestionPedidos = () => {
           />
         </div>
         <div className="gp-status-filters">
-          <button className={filtroEstado === 'TODOS' ? 'active' : ''} onClick={() => setFiltroEstado('TODOS')}>Todos</button>
-          <button className={filtroEstado === 'PENDIENTE' ? 'active' : ''} onClick={() => setFiltroEstado('PENDIENTE')}>Pendientes</button>
-          <button className={filtroEstado === 'PAGADO' ? 'active' : ''} onClick={() => setFiltroEstado('PAGADO')}>Pagados</button>
-          <button className={filtroEstado === 'EN_TRANSITO' ? 'active' : ''} onClick={() => setFiltroEstado('EN_TRANSITO')}>En Tránsito</button>
+          {['TODOS', 'PENDIENTE', 'PAGADO', 'EN_TRANSITO', 'ENTREGADO'].map(estado => (
+            <button 
+              key={estado}
+              className={filtroEstado === estado ? 'active' : ''}
+              onClick={() => setFiltroEstado(estado)}
+            >
+              {estado === 'TODOS' ? 'Todos' : estado.replace('_', ' ')}
+            </button>
+          ))}
+        </div>
+        <div className="gp-rows-selector">
+          <span>Mostrar</span>
+          <select value={filasPorPagina} onChange={(e) => setFilasPorPagina(Number(e.target.value))}>
+            <option value={10}>10</option>
+            <option value={20}>20</option>
+            <option value={30}>30</option>
+            <option value={50}>50</option>
+          </select>
         </div>
       </div>
 
       {error && <div className="gp-error-banner">{error}</div>}
 
-      {/* Tabla de Pedidos */}
-      <div className="gp-table-container">
+      {/* Tabla */}
+      <div className="gp-table-wrapper">
         {cargando ? (
           <div className="gp-loading">Cargando pedidos...</div>
-        ) : pedidosFiltrados.length === 0 ? (
+        ) : pedidosPaginados.length === 0 ? (
           <div className="gp-empty">No se encontraron pedidos con los filtros seleccionados.</div>
         ) : (
           <table className="gp-table">
@@ -109,33 +200,36 @@ const GestionPedidos = () => {
               <tr>
                 <th>ID</th>
                 <th>Cliente</th>
-                <th>Tipo / Contacto</th>
-                <th>Método Pago</th>
+                <th>Contacto</th>
+                <th>Productos</th>
+                <th>Método de Pago</th>
                 <th>Total</th>
-                <th>Estado de Envío</th>
+                <th>Estado</th>
                 <th>Acciones</th>
               </tr>
             </thead>
             <tbody>
-              {pedidosFiltrados.map((pedido) => (
+              {pedidosPaginados.map((pedido) => (
                 <tr key={pedido.id}>
-                  <td><strong>#{pedido.id}</strong></td>
+                  <td><span className="gp-id">#{pedido.id}</span></td>
                   <td>
-                    <div className="gp-client-info">
+                    <div className="gp-client">
                       <span className="gp-name">{pedido.cliente_nombres} {pedido.cliente_apellidos}</span>
                       <span className="gp-doc">{pedido.tipo_documento}: {pedido.numero_documento || 'N/A'}</span>
                     </div>
                   </td>
                   <td>
-                    <div className="gp-contact-info">
+                    <div className="gp-contact">
                       <span>{pedido.cliente_email}</span>
                       <span className="gp-phone">{pedido.cliente_telefono}</span>
                     </div>
                   </td>
-                  <td>{pedido.metodo_pago || 'Contra Entrega / Cotización'}</td>
+                  <td className="gp-productos-col">
+                    {renderProductos(pedido)}
+                  </td>
+                  <td>{pedido.metodo_pago || 'Contra Entrega'}</td>
                   <td><strong>S/ {Number(pedido.total).toFixed(2)}</strong></td>
                   <td>
-                    {/* ✅ SELECTOR INTERACTIVO DE ESTADO */}
                     <select 
                       className={`gp-status-select ${pedido.estado_pedido?.toLowerCase()}`}
                       value={pedido.estado_pedido}
@@ -153,24 +247,20 @@ const GestionPedidos = () => {
                       <button 
                         className="gp-btn-view" 
                         onClick={() => setPedidoSeleccionado(pedido)}
-                        title="Ver detalles"
                       >
                         Ver Detalle
                       </button>
-                      {/* Mantengo los botones rápidos solo si está PENDIENTE */}
                       {pedido.estado_pedido === 'PENDIENTE' && (
                         <>
                           <button 
                             className="gp-btn-success" 
                             onClick={() => cambiarEstadoPedido(pedido.id, 'PAGADO')}
-                            title="Confirmar Pago"
                           >
-                            Aprobar Pago
+                            Aprobar
                           </button>
                           <button 
                             className="gp-btn-danger" 
                             onClick={() => cambiarEstadoPedido(pedido.id, 'CANCELADO')}
-                            title="Cancelar pedido"
                           >
                             Rechazar
                           </button>
@@ -185,7 +275,39 @@ const GestionPedidos = () => {
         )}
       </div>
 
-      {/* Modal de Detalle de Pedido */}
+      {/* Paginación */}
+      {!cargando && pedidosFiltrados.length > 0 && (
+        <div className="gp-pagination">
+          <div className="gp-pagination-info">
+            Mostrando {indexPrimero + 1} - {Math.min(indexUltimo, pedidosFiltrados.length)} de {pedidosFiltrados.length} pedidos
+          </div>
+          <div className="gp-pagination-controls">
+            <button onClick={() => cambiarPagina(1)} disabled={paginaActual === 1}>&lt;&lt;</button>
+            <button onClick={() => cambiarPagina(paginaActual - 1)} disabled={paginaActual === 1}>&lt;</button>
+            {getRangoPaginas().map(num => (
+              <button key={num} className={num === paginaActual ? 'active' : ''} onClick={() => cambiarPagina(num)}>
+                {num}
+              </button>
+            ))}
+            <button onClick={() => cambiarPagina(paginaActual + 1)} disabled={paginaActual === totalPaginas}>&gt;</button>
+            <button onClick={() => cambiarPagina(totalPaginas)} disabled={paginaActual === totalPaginas}>&gt;&gt;</button>
+            <form onSubmit={irPaginaInput} className="gp-pagination-form">
+              <span>Ir a</span>
+              <input 
+                type="number" 
+                min="1" 
+                max={totalPaginas} 
+                value={paginaInput}
+                onChange={(e) => setPaginaInput(e.target.value)}
+                placeholder="Pág."
+              />
+              <button type="submit">Ir</button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de detalle */}
       {pedidoSeleccionado && (
         <div className="gp-modal-overlay" onClick={() => setPedidoSeleccionado(null)}>
           <div className="gp-modal-content" onClick={(e) => e.stopPropagation()}>
@@ -193,11 +315,10 @@ const GestionPedidos = () => {
               <h3>Detalles del Pedido #{pedidoSeleccionado.id}</h3>
               <button className="gp-close-btn" onClick={() => setPedidoSeleccionado(null)}>&times;</button>
             </div>
-            
             <div className="gp-modal-body">
-              <div className="gp-grid-info">
+              <div className="gp-modal-grid">
                 <div>
-                  <h4>Información del Cliente</h4>
+                  <h4>👤 Cliente</h4>
                   <p><strong>Nombres:</strong> {pedidoSeleccionado.cliente_nombres} {pedidoSeleccionado.cliente_apellidos}</p>
                   <p><strong>Email:</strong> {pedidoSeleccionado.cliente_email}</p>
                   <p><strong>Teléfono:</strong> {pedidoSeleccionado.cliente_telefono}</p>
@@ -208,15 +329,16 @@ const GestionPedidos = () => {
                       <p><strong>Dir. Fiscal:</strong> {pedidoSeleccionado.direccion_fiscal}</p>
                     </>
                   )}
+                  <h4 style={{ marginTop: '1rem' }}>🛒 Productos</h4>
+                  {renderProductos(pedidoSeleccionado)}
                 </div>
                 <div>
-                  <h4>Datos de Envíos y Totales</h4>
+                  <h4>📦 Envío y Total</h4>
                   <p><strong>Dirección:</strong> {pedidoSeleccionado.direccion_envio_texto || 'No especificada'}</p>
                   <p><strong>Ciudad / Distrito:</strong> {pedidoSeleccionado.ciudad || 'Lima'}</p>
                   <p><strong>Método de Pago:</strong> {pedidoSeleccionado.metodo_pago}</p>
                   <p>
-                    <strong>Estado Actual:</strong> 
-                    {/* Selector también disponible dentro del modal */}
+                    <strong>Estado:</strong>
                     <select 
                       className={`gp-status-select modal-select ${pedidoSeleccionado.estado_pedido?.toLowerCase()}`}
                       value={pedidoSeleccionado.estado_pedido}

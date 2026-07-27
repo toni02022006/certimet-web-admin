@@ -21,7 +21,7 @@ const GestionPedidos = () => {
   const [paginaInput, setPaginaInput] = useState('');
 
   const token = localStorage.getItem('token') || sessionStorage.getItem('token');
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+  const API_URL = import.meta.env.VITE_API_URL || 'https://api.certimet.pe';
 
   const obtenerPedidos = async () => {
     try {

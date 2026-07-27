@@ -103,7 +103,7 @@ const ProductoFormPage = () => {
             ficha_tecnica_url: prod.ficha_tecnica_url || '',
           });
           if (prod.imagen_principal_url) {
-            setImagenPreview(`http://localhost:3000${prod.imagen_principal_url}`);
+            setImagenPreview(`https://api.certimet.pe${prod.imagen_principal_url}`);
           }
           if (prod.imagenes && prod.imagenes.length > 0) {
             setGaleriaExistente(prod.imagenes);

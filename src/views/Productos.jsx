@@ -182,7 +182,7 @@ const Productos = () => {
                     <td>
                       {prod.imagen_principal_url ? (
                         <img
-                          src={`http://localhost:3000${prod.imagen_principal_url}`}
+                          src={`https://api.certimet.pe${prod.imagen_principal_url}`}
                           alt={prod.nombre}
                           className="productos-img"
                         />

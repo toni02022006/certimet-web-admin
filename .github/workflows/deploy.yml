@@ -22,6 +22,8 @@ jobs:
 
       - name: Compilar el proyecto (Build)
         run: npm run build
+        env:
+          VITE_API_URL: https://api.certimet.pe
 
       - name: Subir a cPanel vía FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4

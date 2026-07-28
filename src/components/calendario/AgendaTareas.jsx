@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext';
-import axios from 'axios';
+import api from '../../services/api';
 import Swal from 'sweetalert2';
 
 const IconEdit = () => (
@@ -50,7 +50,7 @@ const AgendaTareas = ({ tareas, cargando, onTareaIniciada, onTareaEditada, onTar
 
   const handleIniciar = async (tareaId) => {
     try {
-      await axios.post('/api/seguimiento/tarea/iniciar', { 
+      await api.post('/seguimiento/tarea/iniciar', { 
         tareaId,
         asignado_id: usuario.id,
         creador_id: usuario.id

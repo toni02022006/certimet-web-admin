@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../services/api';
 import Swal from 'sweetalert2';
 import './TablaTareas.css';
 
@@ -53,7 +53,7 @@ const TablaTareas = ({ usuarioId, onTareaCambio }) => {
     if (!usuarioId) return;
     setCargando(true);
     try {
-      const res = await axios.get(`/api/seguimiento/usuario/${usuarioId}/tareas`);
+      const res = await api.get(`/seguimiento/usuario/${usuarioId}/tareas`);
       setTareas(res.data);
     } catch (error) {
       console.error('Error al cargar tareas:', error);
@@ -115,7 +115,7 @@ const TablaTareas = ({ usuarioId, onTareaCambio }) => {
   // Reanudar tarea (solo si está PAUSADA)
   const handleReanudar = async (id) => {
     try {
-      await axios.post('/api/seguimiento/tarea/reanudar', { tareaId: id });
+      await api.post('/seguimiento/tarea/reanudar', { tareaId: id });
       Swal.fire('Reanudada', 'La tarea se ha reanudado', 'success');
       cargarTareas();
       if (onTareaCambio) onTareaCambio(); // Notifica al padre para que refresque la tarea activa
@@ -139,7 +139,7 @@ const TablaTareas = ({ usuarioId, onTareaCambio }) => {
     if (!confirm.isConfirmed) return;
 
     try {
-      await axios.post('/api/seguimiento/tarea/finalizar', { tareaId: id });
+      await api.post('/seguimiento/tarea/finalizar', { tareaId: id });
       Swal.fire('Finalizada', 'La tarea ha sido finalizada', 'success');
       cargarTareas();
       if (onTareaCambio) onTareaCambio();
@@ -163,7 +163,7 @@ const TablaTareas = ({ usuarioId, onTareaCambio }) => {
     if (!confirm.isConfirmed) return;
 
     try {
-      await axios.delete(`/api/seguimiento/tarea/${id}`);
+      await api.delete(`/seguimiento/tarea/${id}`);
       Swal.fire('Eliminada', 'Tarea eliminada correctamente', 'success');
       cargarTareas();
       if (onTareaCambio) onTareaCambio();
@@ -197,7 +197,7 @@ const TablaTareas = ({ usuarioId, onTareaCambio }) => {
     }
 
     try {
-      await axios.put(`/api/seguimiento/tarea/${tareaEditando.id}`, { titulo, descripcion });
+      await api.put(`/seguimiento/tarea/${tareaEditando.id}`, { titulo, descripcion });
       Swal.fire('Actualizada', 'Tarea actualizada correctamente', 'success');
       cerrarModal();
       cargarTareas();

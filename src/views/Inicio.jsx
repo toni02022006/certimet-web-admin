@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import axios from 'axios';
+import api from '../services/api';
 import Swal from 'sweetalert2';
 import './Inicio.css';
 import ExportarReportes from '../components/seguimiento/ExportarReportes';
@@ -120,8 +120,8 @@ const Inicio = () => {
     const fetchData = async () => {
       try {
         const [resEmpresas, resCategorias] = await Promise.all([
-          axios.get('/api/seguimiento/empresas'),
-          axios.get('/api/seguimiento/categorias')
+          api.get('/seguimiento/empresas'),
+          api.get('/seguimiento/categorias')
         ]);
         setEmpresas(Array.isArray(resEmpresas.data) ? resEmpresas.data : []);
         setCategorias(Array.isArray(resCategorias.data) ? resCategorias.data : []);
@@ -139,9 +139,10 @@ const Inicio = () => {
     if (!usuario?.id) return;
     setCargando(true);
     try {
-      const res = await axios.get(`/api/seguimiento/usuario/${usuario.id}/tareas`);
-      setTareas(res.data);
-      aplicarFiltros(res.data);
+      const res = await api.get(`/seguimiento/usuario/${usuario.id}/tareas`);
+      const lista = Array.isArray(res.data) ? res.data : [];
+      setTareas(lista);
+      aplicarFiltros(lista);
     } catch (error) {
       console.error('Error cargando tareas:', error);
     } finally {
@@ -195,8 +196,8 @@ const Inicio = () => {
   const cargarEstado = async () => {
     if (!usuario?.id) return;
     try {
-      const res = await axios.get(`/api/seguimiento/estado?usuario_id=${usuario.id}`);
-      const tareasActivas = res.data;
+      const res = await api.get(`/seguimiento/estado?usuario_id=${usuario.id}`);
+      const tareasActivas = Array.isArray(res.data) ? res.data : [];
       const enProceso = tareasActivas.find(t => t.estado === 'EN_PROCESO');
       const enPausa = tareasActivas.find(t => t.estado === 'PAUSADA');
 
@@ -296,7 +297,7 @@ const Inicio = () => {
         asignado_id: usuario.id,
         creador_id: usuario.id,
       };
-      const res = await axios.post('/api/seguimiento/tarea/iniciar', payload);
+      const res = await api.post('/seguimiento/tarea/iniciar', payload);
       setTareaActualId(res.data.id);
       setActivo(true);
       setPausado(false);
@@ -312,7 +313,7 @@ const Inicio = () => {
   const handlePausar = async () => {
     if (!tareaActualId) return;
     try {
-      await axios.post('/api/seguimiento/tarea/pausar', {
+      await api.post('/seguimiento/tarea/pausar', {
         tareaId: tareaActualId,
         motivo: 'Pausa manual',
         usuario_id: usuario.id
@@ -349,7 +350,7 @@ const Inicio = () => {
     if (!confirm.isConfirmed) return;
 
     try {
-      await axios.post('/api/seguimiento/tarea/finalizar', {
+      await api.post('/seguimiento/tarea/finalizar', {
         tareaId: tareaActualId,
         usuario_id: usuario.id
       });
@@ -370,7 +371,7 @@ const Inicio = () => {
   // Reanudar tarea desde la tabla
   const handleReanudar = async (tarea) => {
     try {
-      await axios.post('/api/seguimiento/tarea/reanudar', {
+      await api.post('/seguimiento/tarea/reanudar', {
         tareaId: tarea.id,
         usuario_id: usuario.id
       });
@@ -391,7 +392,7 @@ const Inicio = () => {
     }
 
     try {
-      await axios.post('/api/kanban/tareas/iniciar', {
+      await api.post('/kanban/tareas/iniciar', {
         tareaId: tareaId,
         usuario_id: usuario.id
       });
@@ -426,7 +427,7 @@ const Inicio = () => {
     if (nuevaDesc === undefined) return;
 
     try {
-      await axios.put(`/api/seguimiento/tarea/${tarea.id}`, {
+      await api.put(`/seguimiento/tarea/${tarea.id}`, {
         titulo: nuevoTitulo.trim(),
         descripcion: nuevaDesc.trim()
       });
@@ -452,7 +453,7 @@ const Inicio = () => {
     if (!confirm.isConfirmed) return;
 
     try {
-      await axios.delete(`/api/seguimiento/tarea/${id}`);
+      await api.delete(`/seguimiento/tarea/${id}`);
       cargarTareas();
       Swal.fire('Eliminada', 'Tarea eliminada correctamente', 'success');
     } catch (error) {

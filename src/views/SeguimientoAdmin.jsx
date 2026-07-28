@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import axios from 'axios';
+import api from '../services/api';
 import Swal from 'sweetalert2';
 import './SeguimientoAdmin.css';
 
@@ -92,15 +92,15 @@ const SeguimientoAdmin = () => {
     const fetchInitialData = async () => {
       try {
         // Obtener equipo del admin (para monitor en vivo)
-        const resEquipo = await axios.get('/api/seguimiento/admin/equipo');
+        const resEquipo = await api.get('/seguimiento/admin/equipo');
         setEquipo(resEquipo.data);
 
         // Obtener categorías
-        const resCats = await axios.get('/api/seguimiento/categorias');
+        const resCats = await api.get('/seguimiento/categorias');
         setCategorias(resCats.data);
 
         // Obtener todos los usuarios no administradores (para filtro)
-        const resUsuarios = await axios.get('/api/usuarios/practicantes');
+        const resUsuarios = await api.get('/usuarios/practicantes');
         setUsuariosDisponibles(resUsuarios.data);
 
         // Obtener todas las tareas (sin filtro inicial)
@@ -120,8 +120,8 @@ const SeguimientoAdmin = () => {
     setLoading(true);
     try {
       // Obtener TODAS las tareas (sin filtro de admin)
-      const res = await axios.get('/api/seguimiento/todas-tareas');
-      const todas = res.data;
+      const res = await api.get('/seguimiento/todas-tareas');
+      const todas = Array.isArray(res.data) ? res.data : [];
 
       // Filtrar por creador_id (el admin actual)
       const misTareas = todas.filter(t => t.creador_id === usuario?.id);

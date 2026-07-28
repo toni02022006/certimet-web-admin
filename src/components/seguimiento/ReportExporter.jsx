@@ -2,11 +2,11 @@ import React from 'react';
 import * as XLSX from 'xlsx';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
-import axios from 'axios';
+import api from '../../services/api';
 
 const ReportExporter = () => {
   const exportarExcel = async () => {
-    const res = await axios.get('/api/seguimiento/todas-tareas'); // Endpoint para todas las tareas
+    const res = await api.get('/seguimiento/todas-tareas');
     const data = res.data.map(t => ({
       Título: t.titulo,
       Usuario: t.asignado.nombre + ' ' + t.asignado.apellidos,
@@ -22,7 +22,7 @@ const ReportExporter = () => {
   };
 
   const exportarPDF = async () => {
-    const res = await axios.get('/api/seguimiento/todas-tareas');
+    const res = await api.get('/seguimiento/todas-tareas');
     const doc = new jsPDF();
     doc.text('Reporte de Tiempos', 14, 16);
     // Usar autotable para mostrar datos

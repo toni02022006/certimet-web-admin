@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../services/api';
 import './TaskForm.css';
 
 const TaskForm = ({ onTaskCreated }) => {
@@ -15,11 +15,11 @@ const TaskForm = ({ onTaskCreated }) => {
   const [tiempo, setTiempo] = useState(0);
 
   useEffect(() => {
-    axios.get('/api/seguimiento/empresas')
+    api.get('/seguimiento/empresas')
       .then(res => setEmpresas(Array.isArray(res.data) ? res.data : (res.data?.empresas || [])))
       .catch(err => console.error("Error cargando empresas:", err));
 
-    axios.get('/api/seguimiento/categorias')
+    api.get('/seguimiento/categorias')
       .then(res => setCategorias(Array.isArray(res.data) ? res.data : (res.data?.categorias || [])))
       .catch(err => console.error("Error cargando categorías:", err));
 
@@ -38,7 +38,7 @@ const TaskForm = ({ onTaskCreated }) => {
     e.preventDefault();
     setCargando(true);
     try {
-      const response = await axios.post('/api/seguimiento/tarea/iniciar', form);
+      const response = await api.post('/seguimiento/tarea/iniciar', form);
       onTaskCreated(response.data);
       setForm({ titulo: '', descripcion: '', empresa_id: '', categoria_tarea_id: '' });
       setTiempo(0);

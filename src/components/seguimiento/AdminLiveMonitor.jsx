@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../services/api';
 import TimerClock from './TimerClock';
 
 const AdminLiveMonitor = () => {
@@ -8,7 +8,7 @@ const AdminLiveMonitor = () => {
   const fetchPracticantes = async () => {
     try {
       // Endpoint que devuelva lista de practicantes con su tarea activa (si la tienen)
-      const res = await axios.get('/api/seguimiento/estado-practicantes'); // Crear este endpoint
+      const res = await api.get('/seguimiento/estado-practicantes');
       setPracticantes(res.data);
     } catch (error) {
       console.error(error);

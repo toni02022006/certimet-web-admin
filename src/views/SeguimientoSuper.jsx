@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import axios from 'axios';
+import api from '../services/api';
 import * as XLSX from 'xlsx';
 import {
   Chart as ChartJS,
@@ -111,21 +111,22 @@ const SeguimientoSuper = () => {
     setLoading(true);
     try {
       // 1. Estado en vivo de practicantes
-      const resActivos = await axios.get('/api/seguimiento/estado-practicantes');
-      setUsuariosActivos(resActivos.data);
+      const resActivos = await api.get('/seguimiento/estado-practicantes');
+      setUsuariosActivos(Array.isArray(resActivos.data) ? resActivos.data : []);
 
       // 2. Todas las tareas (para historial y gráficos)
-      const resTareas = await axios.get('/api/seguimiento/todas-tareas');
-      setTodasTareas(resTareas.data);
+      const resTareas = await api.get('/seguimiento/todas-tareas');
+      const tareasData = Array.isArray(resTareas.data) ? resTareas.data : [];
+      setTodasTareas(tareasData);
 
       // 3. Resumen de horas por usuario (para gráfico de barras)
-      const resResumen = await axios.get('/api/seguimiento/resumen');
-      setResumenHoras(resResumen.data);
+      const resResumen = await api.get('/seguimiento/resumen');
+      setResumenHoras(Array.isArray(resResumen.data) ? resResumen.data : []);
 
       // 4. Extraer lista de empresas y usuarios para filtros
       const empresasSet = new Set();
       const usuariosSet = new Set();
-      resTareas.data.forEach(t => {
+      tareasData.forEach(t => {
         if (t.empresa?.nombre) empresasSet.add(t.empresa.nombre);
         if (t.asignado?.nombre) usuariosSet.add(t.asignado.nombre + ' ' + (t.asignado.apellidos || ''));
       });
@@ -133,7 +134,7 @@ const SeguimientoSuper = () => {
       setListaUsuarios([...usuariosSet]);
 
       // Calcular KPIs
-      calcularKPIs(resTareas.data, resActivos.data);
+      calcularKPIs(tareasData, resActivos.data);
 
     } catch (error) {
       console.error('Error cargando datos:', error);

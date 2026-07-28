@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from 'recharts';
-import axios from 'axios';
+import api from '../../services/api';
 
 const PerformanceCharts = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    axios.get('/api/seguimiento/resumen')
+    api.get('/seguimiento/resumen')
       .then(res => {
         // Transformar datos para el gráfico
         const chartData = res.data.map(item => ({

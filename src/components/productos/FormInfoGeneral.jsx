@@ -132,9 +132,8 @@ const FormInfoGeneral = ({
         <div style={styles.formGroup}><label style={styles.label}>Stock</label><input style={styles.input} type="number" name="stock" value={formData.stock} onChange={handleInputChange} required min="0" /></div>
         <div style={styles.formGroup}><label style={styles.label}>Peso (kg)</label><input style={styles.input} type="number" step="0.01" name="peso_kg" value={formData.peso_kg} onChange={handleInputChange} min="0" /></div>
         <div style={styles.formGroup}><label style={styles.label}>Largo (cm)</label><input style={styles.input} type="number" step="0.1" name="largo_cm" value={formData.largo_cm} onChange={handleInputChange} min="0" /></div>
-        <div className="form-group"><label>URL / Slug (SEO)</label><input type="text" name="slug" value={formData.slug} onChange={handleInputChange} placeholder="ejemplo-de-producto-antiguo"/><small>Deja en blanco si es un producto nuevo (opcional)</small></div>
       </div>
-
+      <div className="form-group"><label>URL / Slug (SEO)</label><input type="text" name="slug" value={formData.slug} onChange={handleInputChange} placeholder="ejemplo-de-producto-antiguo"/><small>Deja en blanco si es un producto nuevo (opcional)</small></div>
       <div style={styles.row}>
         <div style={styles.formGroup}><label style={styles.label}>Ancho (cm)</label><input style={styles.input} type="number" step="0.1" name="ancho_cm" value={formData.ancho_cm} onChange={handleInputChange} min="0" /></div>
         <div style={styles.formGroup}><label style={styles.label}>Alto (cm)</label><input style={styles.input} type="number" step="0.1" name="alto_cm" value={formData.alto_cm} onChange={handleInputChange} min="0" /></div>

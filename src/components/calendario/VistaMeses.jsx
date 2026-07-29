@@ -9,7 +9,7 @@ const VistaMeses = ({ eventos, mesActual, anioActual, onCambiarMes, onEventoClic
     const fecha = new Date(ev.fecha_inicio);
     const mes = fecha.getMonth() + 1;
     const anio = fecha.getFullYear();
-    if (anio !== anioActual) return; // Solo mostrar el año actual
+    // Se eliminó el filtro que solo permitía el año actual
     const key = `${anio}-${String(mes).padStart(2, '0')}`;
     if (!eventosPorMes[key]) eventosPorMes[key] = [];
     eventosPorMes[key].push(ev);

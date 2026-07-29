@@ -1068,8 +1068,10 @@
    ============================================================ */
 .calendario-bar {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
   background: #f8fafc;
   border-radius: 8px;
   padding: 8px 16px;
@@ -1276,4 +1278,63 @@
 .agenda-tab.active {
   background-color: #4A6CF7;
   color: #ffffff;
+}
+/* ============================================================
+   NAVEGACIÓN CON FLECHAS (NUEVO)
+   ============================================================ */
+.navegacion-meses {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid #d1d5db;
+  background-color: #ffffff;
+  color: #4a5568;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.btn-nav:hover {
+  background-color: #f0f4ff;
+  border-color: #4a6cf7;
+  color: #4a6cf7;
+  box-shadow: 0 2px 6px rgba(74, 108, 247, 0.15);
+}
+
+.btn-nav:active {
+  transform: scale(0.95);
+}
+
+.mes-titulo {
+  margin: 0;
+  min-width: 160px;
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2d3748;
+  letter-spacing: 0.3px;
+}
+@media (max-width: 768px) {
+  .navegacion-meses {
+    width: 100%;
+    justify-content: center;
+  }
+  .mes-titulo {
+    min-width: 120px;
+    font-size: 1rem;
+  }
+  .btn-nav {
+    width: 32px;
+    height: 32px;
+  }
 }

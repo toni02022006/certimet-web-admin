@@ -11,20 +11,27 @@ import AgendaTareas from '../components/calendario/AgendaTareas';
 import EventoModal from '../components/calendario/EventoModal';
 import '../components/calendario/Calendario.css';
 
+// Iconos SVG para las flechas
+const IconChevronLeft = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="15 18 9 12 15 6" />
+  </svg>
+);
+
+const IconChevronRight = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="9 18 15 12 9 6" />
+  </svg>
+);
+
 const Calendario = () => {
   const { usuario } = useContext(AuthContext);
   
-  // ==============================
-  // ESTADOS PRINCIPALES
-  // ==============================
   const [eventos, setEventos] = useState([]);
   const [tareasUsuario, setTareasUsuario] = useState([]);
-  const [vistaAgenda, setVistaAgenda] = useState('agenda'); // 'agenda', 'miAgenda', 'misTareas'
+  const [vistaAgenda, setVistaAgenda] = useState('agenda');
   const [cargando, setCargando] = useState(false);
   
-  // ==============================
-  // FILTROS
-  // ==============================
   const [filtros, setFiltros] = useState({
     busqueda: '',
     mes: new Date().getMonth() + 1,
@@ -35,26 +42,25 @@ const Calendario = () => {
     prioridad: '',
   });
   
-  // ==============================
-  // MODAL Y VISTA DE CALENDARIO
-  // ==============================
   const [mostrarModal, setMostrarModal] = useState(false);
   const [eventoEditando, setEventoEditando] = useState(null);
   const [fechaSeleccionada, setFechaSeleccionada] = useState(null);
   const [vistaActual, setVistaActual] = useState('meses');
 
   // ==============================
-  // 1. CARGAR EVENTOS (con filtros y tipo de vista)
+  // 1. CARGAR EVENTOS (Rango de 6 meses)
   // ==============================
   const cargarEventos = async () => {
-    // 👇 PASO 1 APLICADO: Si estamos en "misTareas", abortamos la petición para evitar errores
     if (!usuario?.id || vistaAgenda === 'misTareas') return;
     
     setCargando(true);
     try {
+      const fechaDesde = new Date(filtros.anio, filtros.mes - 1, 1).toISOString();
+      const fechaHasta = new Date(filtros.anio, filtros.mes + 5, 0, 23, 59, 59).toISOString();
+
       const params = new URLSearchParams({
-        mes: filtros.mes,
-        anio: filtros.anio,
+        desde: fechaDesde,
+        hasta: fechaHasta,
         tipo: vistaAgenda,
         ...(filtros.busqueda && { busqueda: filtros.busqueda }),
         ...(filtros.categoria && { categoria: filtros.categoria }),
@@ -72,9 +78,6 @@ const Calendario = () => {
     }
   };
 
-  // ==============================
-  // 2. CARGAR TAREAS DEL USUARIO (para "Mis tareas")
-  // ==============================
   const cargarTareasUsuario = async () => {
     if (!usuario?.id) return;
     setCargando(true);
@@ -89,9 +92,6 @@ const Calendario = () => {
     }
   };
 
-  // ==============================
-  // 3. DISPARAR CARGA SEGÚN PESTAÑA ACTIVA
-  // ==============================
   useEffect(() => {
     if (!usuario?.id) return;
     if (vistaAgenda === 'misTareas') {
@@ -102,8 +102,26 @@ const Calendario = () => {
   }, [filtros, vistaAgenda, usuario?.id]);
 
   // ==============================
-  // 4. GUARDAR EVENTO (CREAR / ACTUALIZAR)
+  // NAVEGACIÓN DE MESES (FLECHITAS)
   // ==============================
+  const irMesAnterior = () => {
+    setFiltros(prev => {
+      let m = prev.mes - 1;
+      let a = prev.anio;
+      if (m < 1) { m = 12; a--; }
+      return { ...prev, mes: m, anio: a };
+    });
+  };
+
+  const irMesSiguiente = () => {
+    setFiltros(prev => {
+      let m = prev.mes + 1;
+      let a = prev.anio;
+      if (m > 12) { m = 1; a++; }
+      return { ...prev, mes: m, anio: a };
+    });
+  };
+
   const handleGuardarEvento = async (datos) => {
     try {
       let response;
@@ -113,31 +131,20 @@ const Calendario = () => {
       } else {
         response = await api.post('/calendario/eventos', { ...datos, creador_id: usuario.id });
         Swal.fire('Creado', 'Evento creado correctamente', 'success');
-        
-        // Si se asignó una tarea, recargar tareas del usuario actual
-        if (datos.asignar_tarea) {
-          cargarTareasUsuario();
-        }
+        if (datos.asignar_tarea) cargarTareasUsuario();
       }
       setMostrarModal(false);
       setEventoEditando(null);
       setFechaSeleccionada(null);
       
-      // Recargar según la vista actual
-      if (vistaAgenda === 'misTareas') {
-        cargarTareasUsuario();
-      } else {
-        cargarEventos();
-      }
+      if (vistaAgenda === 'misTareas') cargarTareasUsuario();
+      else cargarEventos();
     } catch (error) {
       console.error('Error guardando evento:', error);
       Swal.fire('Error', 'No se pudo guardar el evento', 'error');
     }
   };
 
-  // ==============================
-  // 5. ELIMINAR EVENTO
-  // ==============================
   const handleEliminarEvento = async (id) => {
     const confirm = await Swal.fire({
       title: '¿Eliminar evento?',
@@ -159,9 +166,6 @@ const Calendario = () => {
     }
   };
 
-  // ==============================
-  // 6. ABRIR MODAL PARA CREAR / EDITAR
-  // ==============================
   const abrirCrearEvento = (fecha) => {
     setEventoEditando(null);
     setFechaSeleccionada(fecha || null);
@@ -190,16 +194,10 @@ const Calendario = () => {
     setMostrarModal(true);
   };
 
-  // ==============================
-  // 7. CAMBIAR MES (para filtros y vistas)
-  // ==============================
   const handleCambiarMes = (mes, anio) => {
     setFiltros(prev => ({ ...prev, mes, anio }));
   };
 
-  // ==============================
-  // 8. ADAPTAR TAREAS PARA MOSTRAR EN COMPONENTES DE CALENDARIO
-  // ==============================
   const eventosAMostrar = vistaAgenda === 'misTareas'
     ? tareasUsuario.map(tarea => ({
         id: tarea.id,
@@ -214,54 +212,30 @@ const Calendario = () => {
       }))
     : eventos;
 
-  // ==============================
-  // 9. RENDERIZADO
-  // ==============================
+  // Filtro para la agenda superior (solo el mes seleccionado)
+  const eventosParaAgenda = vistaAgenda === 'misTareas'
+    ? eventosAMostrar
+    : eventosAMostrar.filter(ev => {
+        const d = new Date(ev.fecha_inicio);
+        return d.getMonth() + 1 === filtros.mes && d.getFullYear() === filtros.anio;
+      });
+
   return (
     <div className="calendario-container">
-      {/* Header y Pestañas alineados en la misma fila */}
-      <div 
-        className="calendario-header" 
-        style={{ 
-          display: 'flex', 
-          justifyContent: 'space-between', 
-          alignItems: 'center', 
-          flexWrap: 'wrap', 
-          gap: '15px',
-          marginBottom: '20px'
-        }}
-      >
-        {/* Lado Izquierdo: Títulos */}
+      <div className="calendario-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '15px', marginBottom: '20px' }}>
         <div>
           <h2 className="calendario-titulo" style={{ margin: '0 0 5px 0' }}>Calendario</h2>
           <p className="calendario-subtitulo" style={{ margin: 0 }}>Gestiona eventos, tareas y fechas importantes</p>
         </div>
 
-        {/* Lado Derecho: Pestañas de Agenda */}
         <div className="agenda-tabs" style={{ margin: 0 }}>
-          <button
-            className={`agenda-tab ${vistaAgenda === 'agenda' ? 'active' : ''}`}
-            onClick={() => setVistaAgenda('agenda')}
-          >
-            Agenda
-          </button>
-          <button
-            className={`agenda-tab ${vistaAgenda === 'miAgenda' ? 'active' : ''}`}
-            onClick={() => setVistaAgenda('miAgenda')}
-          >
-            Mi agenda
-          </button>
-          <button
-            className={`agenda-tab ${vistaAgenda === 'misTareas' ? 'active' : ''}`}
-            onClick={() => setVistaAgenda('misTareas')}
-          >
-            Mis tareas
-          </button>
+          <button className={`agenda-tab ${vistaAgenda === 'agenda' ? 'active' : ''}`} onClick={() => setVistaAgenda('agenda')}>Agenda</button>
+          <button className={`agenda-tab ${vistaAgenda === 'miAgenda' ? 'active' : ''}`} onClick={() => setVistaAgenda('miAgenda')}>Mi agenda</button>
+          <button className={`agenda-tab ${vistaAgenda === 'misTareas' ? 'active' : ''}`} onClick={() => setVistaAgenda('misTareas')}>Mis tareas</button>
         </div>
       </div>
 
       <div className="calendario-grid">
-        {/* Columna izquierda: Filtros + Eventos Pasados */}
         <div className="calendario-col-izquierda">
           <FiltrosCalendario
             filtros={filtros}
@@ -274,46 +248,51 @@ const Calendario = () => {
           />
         </div>
 
-        {/* Columna derecha: Agenda + Barra + Contenido dinámico */}
         <div className="calendario-col-derecha">
-          {vistaAgenda === 'misTareas' ? (
-            <AgendaTareas
-              tareas={tareasUsuario}
-              cargando={cargando}
-              onTareaIniciada={() => {
-                // 👇 PASO 2 APLICADO: Redirige automáticamente al Inicio
-                window.location.href = '/inicio';
-              }}
-              onTareaEditada={abrirEditarEvento}
-              onTareaEliminada={handleEliminarEvento}
-            />
-          ) : (
-            <AgendaEventos
-              eventos={eventosAMostrar}
-              cargando={cargando}
-              onEditar={abrirEditarEvento}
-              onEliminar={handleEliminarEvento}
-            />
-          )}
+          {/* 
+            Contenedor con altura fija para evitar que la barra de navegación se mueva
+            al cambiar el contenido de la agenda.
+          */}
+          <div style={{ height: '380px', overflowY: 'auto', paddingRight: '5px' }}>
+            {vistaAgenda === 'misTareas' ? (
+              <AgendaTareas
+                tareas={tareasUsuario}
+                cargando={cargando}
+                onTareaIniciada={() => { window.location.href = '/inicio'; }}
+                onTareaEditada={abrirEditarEvento}
+                onTareaEliminada={handleEliminarEvento}
+              />
+            ) : (
+              <AgendaEventos
+                eventos={eventosParaAgenda}
+                cargando={cargando}
+                onEditar={abrirEditarEvento}
+                onEliminar={handleEliminarEvento}
+              />
+            )}
+          </div>
 
-          {/* Barra de contador + selector de vista */}
+          {/* BARRA CON FLECHAS ESTILIZADAS - Fija en su lugar */}
           <div className="calendario-bar">
+            <div className="navegacion-meses">
+              <button className="btn-nav" onClick={irMesAnterior} aria-label="Mes anterior">
+                <IconChevronLeft />
+              </button>
+              <h3 className="mes-titulo">
+                {new Date(filtros.anio, filtros.mes - 1).toLocaleString('es', { month: 'long', year: 'numeric' }).toUpperCase()}
+              </h3>
+              <button className="btn-nav" onClick={irMesSiguiente} aria-label="Mes siguiente">
+                <IconChevronRight />
+              </button>
+            </div>
+
             <span className="calendario-contador">
-              {eventosAMostrar.length} {vistaAgenda === 'misTareas' ? 'tareas encontradas' : 'eventos encontrados'}
+              {eventosAMostrar.length} {vistaAgenda === 'misTareas' ? 'tareas' : 'eventos en próximos 6 meses'}
             </span>
+            
             <div className="vista-selector">
-              <button
-                className={`vista-btn ${vistaActual === 'meses' ? 'active' : ''}`}
-                onClick={() => setVistaActual('meses')}
-              >
-                Meses
-              </button>
-              <button
-                className={`vista-btn ${vistaActual === 'calendario' ? 'active' : ''}`}
-                onClick={() => setVistaActual('calendario')}
-              >
-                Calendario
-              </button>
+              <button className={`vista-btn ${vistaActual === 'meses' ? 'active' : ''}`} onClick={() => setVistaActual('meses')}>Meses</button>
+              <button className={`vista-btn ${vistaActual === 'calendario' ? 'active' : ''}`} onClick={() => setVistaActual('calendario')}>Calendario</button>
             </div>
           </div>
 
@@ -338,7 +317,6 @@ const Calendario = () => {
         </div>
       </div>
 
-      {/* Modal para crear/editar evento */}
       <EventoModal
         visible={mostrarModal}
         onClose={() => {

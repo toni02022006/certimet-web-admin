@@ -35,6 +35,7 @@ const ProductoFormPage = () => {
     incluye_igv: true,
     ficha_tecnica_url: '',
     nueva_subcategoria: '',
+    slug: '',
   });
 
   const [imagenPreview, setImagenPreview] = useState(null);
@@ -101,6 +102,7 @@ const ProductoFormPage = () => {
             condicion: prod.condicion || 'NUEVO',
             incluye_igv: prod.incluye_igv ?? true,
             ficha_tecnica_url: prod.ficha_tecnica_url || '',
+            slug: prod.slug || '',
           });
           if (prod.imagen_principal_url) {
             setImagenPreview(`https://api.certimet.pe${prod.imagen_principal_url}`);

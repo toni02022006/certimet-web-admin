@@ -3,13 +3,13 @@ import React from 'react';
 const VistaMeses = ({ eventos, mesActual, anioActual, onCambiarMes, onEventoClick }) => {
   const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
-  // Agrupar eventos por mes (solo los del año actual)
+  // Agrupar eventos por mes (sin restricción de año)
   const eventosPorMes = {};
   eventos.forEach(ev => {
     const fecha = new Date(ev.fecha_inicio);
     const mes = fecha.getMonth() + 1;
     const anio = fecha.getFullYear();
-    if (anio !== anioActual) return; // Solo mostrar el año actual
+    // Se eliminó el filtro que solo permitía el año actual
     const key = `${anio}-${String(mes).padStart(2, '0')}`;
     if (!eventosPorMes[key]) eventosPorMes[key] = [];
     eventosPorMes[key].push(ev);
@@ -66,7 +66,7 @@ const VistaMeses = ({ eventos, mesActual, anioActual, onCambiarMes, onEventoClic
   return (
     <div className="vista-meses-container">
       {mesesKeys.length === 0 ? (
-        <p className="vista-meses-vacio">No hay eventos para este año.</p>
+        <p className="vista-meses-vacio">No hay eventos en el rango seleccionado.</p>
       ) : (
         mesesKeys.map(key => {
           const [anio, mesStr] = key.split('-');

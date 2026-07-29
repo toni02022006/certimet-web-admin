@@ -30,11 +30,19 @@ const ListaMeses = ({
   const diasSemana = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
 
   // ==============================
-  // GENERAR LISTA DE MESES (desde el actual hasta diciembre)
+  // GENERAR LISTA DE MESES (6 meses a partir del actual)
   // ==============================
   const mesesLista = [];
-  for (let m = mesActual; m <= 12; m++) {
-    mesesLista.push({ mes: m, anio: anioActual });
+  let mTemp = mesActual;
+  let aTemp = anioActual;
+  
+  for (let i = 0; i < 6; i++) {
+    mesesLista.push({ mes: mTemp, anio: aTemp });
+    mTemp++;
+    if (mTemp > 12) {
+      mTemp = 1;
+      aTemp++; // Salta al siguiente año si pasa diciembre
+    }
   }
 
   // ==============================

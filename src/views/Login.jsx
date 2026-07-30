@@ -32,10 +32,15 @@ const Login = () => {
     try {
       const response = await api.post('/auth/login', {
         correo,
-        password
+        password,
+        origen: 'admin'
       });
 
       const { token, usuario } = response.data;
+      const rolUsuario = usuario.rol.toLowerCase();
+      if (rolUsuario === 'cliente') {
+        throw new Error('Acceso denegado. Este panel es exclusivo para personal autorizado. Dirígete a la tienda.');
+      }
       login(usuario, token);
 
       // LÓGICA DE REDIRECCIÓN

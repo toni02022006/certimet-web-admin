@@ -1,5 +1,12 @@
 import React from 'react';
 
+const parsearFechaLocal = (fechaInput) => {
+  if (!fechaInput) return null;
+  const fechaString = typeof fechaInput === 'string' ? fechaInput : fechaInput.toISOString();
+  const [year, month, day] = fechaString.split('T')[0].split('-');
+  return new Date(year, month - 1, day);
+};
+
 const VistaMeses = ({ eventos, mesActual, anioActual, onCambiarMes, onEventoClick }) => {
   const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 

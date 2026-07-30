@@ -23,14 +23,14 @@ const AgendaEventos = ({ eventos, cargando, onEditar, onEliminar }) => {
   // Solo eventos próximos (fecha inicio >= hoy)
   const proximos = eventos
     .filter(ev => {
-      const fechaInicio = new Date(ev.fecha_inicio);
+      const fechaInicio = parsearFechaLocal(ev.fecha_inicio);
       return fechaInicio >= hoy;
     })
     .sort((a, b) => new Date(a.fecha_inicio) - new Date(b.fecha_inicio));
 
   const renderEvento = (ev) => {
-    const fechaInicio = new Date(ev.fecha_inicio);
-    const fechaFin = ev.fecha_fin ? new Date(ev.fecha_fin) : null;
+    const fechaInicio = parsearFechaLocal(ev.fecha_inicio);
+    const fechaFin = ev.fecha_fin ? parsearFechaLocal(ev.fecha_fin) : null;
     const estado = ev.estado || 'PENDIENTE';
     const estadoClass = estado.toLowerCase().replace('_', '-');
     const prioridad = ev.prioridad || 'Media';

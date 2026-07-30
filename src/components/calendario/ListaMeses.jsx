@@ -50,7 +50,7 @@ const ListaMeses = ({
   // ==============================
   const eventosPorFecha = {};
   eventos.forEach(ev => {
-    const fecha = new Date(ev.fecha_inicio);
+    const fecha = parsearFechaLocal(ev.fecha_inicio);
     const key = `${fecha.getFullYear()}-${String(fecha.getMonth() + 1).padStart(2, '0')}-${String(fecha.getDate()).padStart(2, '0')}`;
     if (!eventosPorFecha[key]) eventosPorFecha[key] = [];
     eventosPorFecha[key].push(ev);

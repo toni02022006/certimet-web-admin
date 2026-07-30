@@ -216,7 +216,7 @@ const Calendario = () => {
   const eventosParaAgenda = vistaAgenda === 'misTareas'
     ? eventosAMostrar
     : eventosAMostrar.filter(ev => {
-        const d = new Date(ev.fecha_inicio);
+        const d = parsearFechaLocal(ev.fecha_inicio);
         return d.getMonth() + 1 === filtros.mes && d.getFullYear() === filtros.anio;
       });
 

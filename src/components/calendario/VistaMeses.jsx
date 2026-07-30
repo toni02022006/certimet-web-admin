@@ -6,7 +6,7 @@ const VistaMeses = ({ eventos, mesActual, anioActual, onCambiarMes, onEventoClic
   // Agrupar eventos por mes (solo los del año actual)
   const eventosPorMes = {};
   eventos.forEach(ev => {
-    const fecha = new Date(ev.fecha_inicio);
+    const fecha = parsearFechaLocal(ev.fecha_inicio);
     const mes = fecha.getMonth() + 1;
     const anio = fecha.getFullYear();
     // Se eliminó el filtro que solo permitía el año actual
@@ -27,9 +27,9 @@ const VistaMeses = ({ eventos, mesActual, anioActual, onCambiarMes, onEventoClic
 
   // Formatear rango de fechas
   const formatearRango = (fechaInicio, fechaFin) => {
-    const ini = new Date(fechaInicio);
+    const ini = parsearFechaLocal(fechaInicio);
     if (!fechaFin) return ini.toLocaleDateString('es');
-    const fin = new Date(fechaFin);
+    const fin = parsearFechaLocal(fechaFin);
     if (ini.toDateString() === fin.toDateString()) return ini.toLocaleDateString('es');
     return `${ini.toLocaleDateString('es')} - ${fin.toLocaleDateString('es')}`;
   };

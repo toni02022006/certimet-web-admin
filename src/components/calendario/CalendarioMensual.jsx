@@ -49,7 +49,7 @@ const CalendarioMensual = ({
   // Agrupar eventos por día
   const eventosPorDia = {};
   eventos.forEach(ev => {
-    const fecha = new Date(ev.fecha_inicio);
+    const fecha = parsearFechaLocal(ev.fecha_inicio);
     const dia = fecha.getDate();
     if (!eventosPorDia[dia]) eventosPorDia[dia] = [];
     eventosPorDia[dia].push(ev);

@@ -97,7 +97,7 @@ const Layout = () => {
             <span className="cm-logo-mini">C</span>
           ) : (
             <>
-              <span className="cm-logo-accent">CERTIMET</span>&nbsp;ADMIN
+              <span className="cm-logo-accent">CERTIMET</span>&nbsp;
             </>
           )}
         </div>

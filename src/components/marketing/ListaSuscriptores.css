@@ -1,0 +1,240 @@
+/* ===== ListaSuscriptores ===== */
+.ls-container {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  padding: 20px;
+}
+
+.ls-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.ls-stats {
+  display: flex;
+  gap: 20px;
+  font-size: 14px;
+  color: #475569;
+}
+
+.ls-stats strong {
+  color: #1e293b;
+}
+.ls-stats .ls-active {
+  color: #16a34a;
+}
+.ls-stats .ls-inactive {
+  color: #dc2626;
+}
+
+.ls-search input {
+  padding: 8px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 14px;
+  min-width: 280px;
+  transition: border-color 0.2s;
+}
+.ls-search input:focus {
+  outline: none;
+  border-color: #0056b3;
+  box-shadow: 0 0 0 3px rgba(0,86,179,0.15);
+}
+
+.ls-table-wrapper {
+  overflow-x: auto;
+  margin-top: 10px;
+}
+
+.ls-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.ls-table th {
+  background: #f8fafc;
+  color: #1e293b;
+  font-weight: 600;
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.ls-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #e2e8f0;
+  vertical-align: middle;
+}
+
+.ls-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+.ls-etiquetas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.ls-tag {
+  background: #e2e8f0;
+  color: #1e293b;
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.ls-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-block;
+}
+.ls-badge-active {
+  background: #dcfce7;
+  color: #166534;
+}
+.ls-badge-inactive {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.ls-loading, .ls-empty {
+  padding: 40px 20px;
+  text-align: center;
+  color: #64748b;
+}
+
+/* Paginación */
+.ls-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.ls-pagination-info {
+  font-size: 14px;
+  color: #475569;
+}
+
+.ls-pagination-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.ls-rows-selector {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: 10px;
+  font-size: 14px;
+  color: #475569;
+}
+
+.ls-rows-selector select {
+  padding: 4px 8px;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  background: white;
+  cursor: pointer;
+}
+
+.ls-pagination-controls button {
+  background: transparent;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  padding: 4px 10px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #1e293b;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.ls-pagination-controls button:hover:not(:disabled) {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+.ls-pagination-controls button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ls-pagination-controls button.active {
+  background: #0056b3;
+  color: white;
+  border-color: #0056b3;
+}
+
+.ls-pagination-form {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 8px;
+}
+
+.ls-pagination-form span {
+  font-size: 14px;
+  color: #475569;
+}
+
+.ls-pagination-form input {
+  width: 60px;
+  padding: 4px 6px;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.ls-pagination-form input:focus {
+  outline: none;
+  border-color: #0056b3;
+}
+
+.ls-pagination-form button {
+  background: #0056b3;
+  color: white;
+  border: none;
+  padding: 4px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.ls-pagination-form button:hover {
+  background: #004494;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .ls-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .ls-search input {
+    min-width: 100%;
+  }
+  .ls-pagination {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .ls-pagination-controls {
+    justify-content: center;
+  }
+}

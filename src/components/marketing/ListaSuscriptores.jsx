@@ -15,12 +15,19 @@ const ListaSuscriptores = () => {
   // Obtener suscriptores desde el backend
   const fetchSuscriptores = async () => {
     try {
-      // Cambio para producción: usamos API_URL
       const response = await fetch(`${API_URL}/api/newsletter/lista`);
       const data = await response.json();
-      setSuscriptores(data);
+      
+      // SOLUCIÓN: Verificamos si la respuesta es OK y si data es realmente un Array
+      if (response.ok && Array.isArray(data)) {
+        setSuscriptores(data);
+      } else {
+        console.error('El backend no devolvió un array válido. Respuesta:', data);
+        setSuscriptores([]); // Forzamos un array vacío para evitar el crash del .filter()
+      }
     } catch (error) {
       console.error('Error cargando suscriptores:', error);
+      setSuscriptores([]); // Forzamos un array vacío si se cae la red
     } finally {
       setLoading(false);
     }

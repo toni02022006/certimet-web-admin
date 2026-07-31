@@ -1,0 +1,240 @@
+/* RedactarCampana.css */
+
+.redactar-campana-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  align-items: stretch;
+}
+
+/* --- SECCIÓN FORMULARIO (Izquierda) --- */
+.campana-form-section {
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.campana-form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 15px;
+}
+
+.campana-form-header h2 {
+  font-size: 18px;
+  color: #1e293b;
+  margin: 0;
+}
+
+.plantillas-botones {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-plantilla {
+  background-color: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-plantilla:hover {
+  background-color: #e2e8f0;
+  border-color: #94a3b8;
+}
+
+.campana-form-body {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.form-group.flex-grow {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.codigo-fuente {
+  font-family: 'Consolas', 'Monaco', monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  background-color: #1e1e1e;
+  color: #d4d4d4;
+  flex-grow: 1;
+  min-height: 250px;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  padding: 12px;
+  resize: vertical;
+}
+.codigo-fuente:focus {
+  border-color: #0056b3;
+  box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.2);
+}
+
+/* --- SECCIÓN VISTA PREVIA (Derecha) --- */
+.campana-preview-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.campana-preview-section h2 {
+  font-size: 18px;
+  color: #1e293b;
+  margin: 0 0 20px 0;
+}
+
+.preview-container {
+  background: white;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.preview-header {
+  background-color: #f8fafc;
+  padding: 15px 20px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.preview-header p {
+  margin: 0 0 5px 0;
+  font-size: 14px;
+  color: #334155;
+}
+
+.preview-header p:last-child {
+  margin: 0;
+}
+
+/* BARRA DE HERRAMIENTAS */
+.editor-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 8px 12px;
+  background: #f1f5f9;
+  border-bottom: 1px solid #e2e8f0;
+  align-items: center;
+}
+
+.editor-toolbar button {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+  min-width: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.editor-toolbar button:hover {
+  background: #e2e8f0;
+  border-color: #cbd5e1;
+}
+
+.editor-toolbar input[type="color"] {
+  width: 28px;
+  height: 28px;
+  padding: 2px;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  cursor: pointer;
+  background: white;
+}
+
+.editor-toolbar select {
+  padding: 4px 8px;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  background: white;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.toolbar-separator {
+  width: 1px;
+  height: 28px;
+  background: #cbd5e1;
+  margin: 0 4px;
+}
+
+.preview-body {
+  padding: 20px;
+  flex-grow: 1;
+  background-color: #f1f5f9;
+  overflow-y: auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+/* Estilo del editor editable */
+.editable-preview {
+  width: 100%;
+  min-height: 300px;
+  background: white;
+  padding: 20px;
+  border: 2px dashed #cbd5e1;
+  border-radius: 6px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+  font-family: inherit;
+  color: inherit;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.editable-preview:focus {
+  border-color: #0056b3;
+  box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.15);
+}
+
+.editable-preview:hover {
+  border-color: #94a3b8;
+}
+
+/* Mensaje de alerta */
+.alert {
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+.alert.success {
+  background-color: #dcfce7;
+  color: #166534;
+  border: 1px solid #86efac;
+}
+.alert.error {
+  background-color: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+}
+
+/* Responsivo */
+@media (max-width: 1100px) {
+  .redactar-campana-wrapper {
+    grid-template-columns: 1fr;
+  }
+}

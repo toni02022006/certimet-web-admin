@@ -19,7 +19,7 @@ import Calendario from './views/Calendario';
 import NotificacionGlobal from './utils/NotificacionGlobal';    
 import GestionPedidos from './views/GestionPedidos';
 import NuevoArticulo from './components/Blog/NuevoArticulo';
-
+import MarketingView from './views/MarketingView';
 // Guardián de rutas (requiere token)
 const RutaProtegida = ({ children }) => {
   const { token } = useContext(AuthContext);
@@ -105,6 +105,7 @@ function App() {
               <Route path="productos/editar/:id" element={<ProductoFormPage />} />
               <Route path="gestion-pedidos" element={<GestionPedidos />} />
               <Route path="asignacion" element={<AsignacionAdmin />} />
+              <Route path="marketing" element={<MarketingView />} />
             </Route>
 
             {/* Rutas solo Superadmin */}

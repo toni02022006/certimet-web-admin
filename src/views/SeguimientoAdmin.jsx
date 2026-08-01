@@ -324,7 +324,7 @@ const SeguimientoAdmin = () => {
 
   return (
     <div className="admin-container">
-      <h2 className="admin-title">📊 Panel de Seguimiento - Admin</h2>
+      <h2 className="admin-title">Panel de Seguimiento - Admin</h2>
       <p className="admin-subtitle">Tareas que has asignado a los usuarios</p>
 
       {/* ========== FILTROS ========== */}

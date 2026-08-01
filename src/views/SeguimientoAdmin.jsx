@@ -421,7 +421,7 @@ const SeguimientoAdmin = () => {
 
       {/* ========== MONITOR EN VIVO (Usuarios con tareas activas) ========== */}
       <div className="admin-monitor-card">
-        <h3>🟢 Monitor en Vivo</h3>
+        <h3>Monitor en Vivo</h3>
         {loading ? (
           <p className="admin-loading">Cargando...</p>
         ) : (
@@ -467,7 +467,7 @@ const SeguimientoAdmin = () => {
 
       {/* ========== TABLA DE TAREAS ASIGNADAS ========== */}
       <div className="admin-tabla-card">
-        <h3>📋 Mis Asignaciones</h3>
+        <h3>Mis Asignaciones</h3>
         {loading ? (
           <p className="admin-loading">Cargando tareas...</p>
         ) : tareasAsignadas.length === 0 ? (

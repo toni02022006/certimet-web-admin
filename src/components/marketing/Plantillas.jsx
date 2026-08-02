@@ -4,7 +4,7 @@ import Swal from 'sweetalert2';
 import './Plantillas.css';
 
 // Definimos la URL base para producción (Compatible con Vite)
-const API_URL = import.meta.env.VITE_API_URL || 'https://api.certimet.pe';
+const API_URL = import.meta.env.VITE_API_URL;
 
 // Mismo IconEdit que se usa en Productos
 const IconEdit = () => (

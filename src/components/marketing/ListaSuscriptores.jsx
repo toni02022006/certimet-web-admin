@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './ListaSuscriptores.css'; // Puedes usar Marketing.css si prefieres
 
 // Definimos la URL base para producción (Compatible con Vite)
-const API_URL = import.meta.env.VITE_API_URL || 'https://api.certimet.pe';
+const API_URL = import.meta.env.VITE_API_URL;
 
 const ListaSuscriptores = () => {
   const [suscriptores, setSuscriptores] = useState([]);

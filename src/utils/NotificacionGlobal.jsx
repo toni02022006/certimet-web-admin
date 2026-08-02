@@ -15,7 +15,7 @@ const NotificacionGlobal = () => {
       Notification.requestPermission();
     }
 
-    const socketUrl = import.meta.env.VITE_API_URL || 'https://api.certimet.pe';
+    const socketUrl = import.meta.env.VITE_API_URL;
     const socket = io(socketUrl, {
       path: '/socket.io',
       transports: ['websocket', 'polling'],

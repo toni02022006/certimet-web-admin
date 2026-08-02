@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_ORIGIN = import.meta.env.VITE_API_URL || 'https://api.certimet.pe';
+const API_ORIGIN = import.meta.env.VITE_API_URL;
 
 const api = axios.create({
   baseURL: import.meta.env.DEV ? '/api' : `${API_ORIGIN}/api`,

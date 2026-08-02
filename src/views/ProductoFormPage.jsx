@@ -105,7 +105,7 @@ const ProductoFormPage = () => {
             slug: prod.slug || '',
           });
           if (prod.imagen_principal_url) {
-            setImagenPreview(`https://api.certimet.pe${prod.imagen_principal_url}`);
+            setImagenPreview(`${import.meta.env.VITE_API_URL}${prod.imagen_principal_url}`);
           }
           if (prod.imagenes && prod.imagenes.length > 0) {
             setGaleriaExistente(prod.imagenes);

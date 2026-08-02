@@ -43,7 +43,7 @@ export default function DashboardCalendario() {
   const token = localStorage.getItem('token') || sessionStorage.getItem('token');
   
   // 🔥 CORRECCIÓN PARA PRODUCCIÓN: URL base apuntando al backend real
-  const API_URL = import.meta.env.VITE_API_URL || 'https://api.certimet.pe';
+  const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     obtenerDatosReales();

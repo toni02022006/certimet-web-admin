@@ -182,7 +182,7 @@ const Productos = () => {
                     <td>
                       {prod.imagen_principal_url ? (
                         <img
-                          src={`https://api.certimet.pe${prod.imagen_principal_url}`}
+                          src={`${import.meta.env.VITE_API_URL}${prod.imagen_principal_url}`}
                           alt={prod.nombre}
                           className="productos-img"
                         />

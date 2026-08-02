@@ -43,7 +43,7 @@ const FormGaleria = ({
           {/* Imágenes existentes (con botón X) */}
           {galeriaExistente.map((img) => (
             <div key={`existente-${img.id}`} style={{ position: 'relative' }}>
-              <img src={`https://api.certimet.pe${img.url_imagen}`} alt="Existente" style={styles.galeriaThumb} />
+              <img src={`${import.meta.env.VITE_API_URL}${img.url_imagen}`} alt="Existente" style={styles.galeriaThumb} />
               <button
                 type="button"
                 onClick={() => eliminarImagenExistente(img.id)}

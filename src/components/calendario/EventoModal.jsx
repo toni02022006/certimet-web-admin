@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { createPortal } from 'react-dom'; // 🔥 1. IMPORTAMOS CREATEPORTAL
 import { AuthContext } from '../../context/AuthContext';
-// <-- 1. Agregamos "api" a tus importaciones existentes
 import api, {
   obtenerPracticantes,
   obtenerEmpresas,
@@ -48,7 +48,6 @@ const EventoModal = ({ visible, onClose, onGuardar, evento, fechaInicial }) => {
   const [prioridades, setPrioridades] = useState([]);
   const [cargandoOpciones, setCargandoOpciones] = useState(false);
 
-  // <-- 2. Reemplazamos los fetch directos por api.get
   useEffect(() => {
     const fetchOpciones = async () => {
       setCargandoOpciones(true);
@@ -76,7 +75,6 @@ const EventoModal = ({ visible, onClose, onGuardar, evento, fechaInicial }) => {
     fetchOpciones();
   }, []);
 
-  // Cargar datos para asignación (solo admin)
   useEffect(() => {
     if (esAdmin && visible) {
       const fetchAsignacionData = async () => {
@@ -100,7 +98,6 @@ const EventoModal = ({ visible, onClose, onGuardar, evento, fechaInicial }) => {
     }
   }, [esAdmin, visible]);
 
-  // Rellenar formulario al editar o con fecha inicial
   useEffect(() => {
     if (!visible) return;
     if (evento) {
@@ -172,8 +169,6 @@ const EventoModal = ({ visible, onClose, onGuardar, evento, fechaInicial }) => {
 
     const fechaInicioConZona = form.fecha_inicio + 'T00:00:00-05:00';
     const fechaFinConZona = form.fecha_fin ? form.fecha_fin + 'T00:00:00-05:00' : null;
-
-    // 🔥 Asegurar que es_personal se calcule correctamente
     const esPersonal = form.visibilidad === 'PRIVADO';
 
     const datosEnvio = {
@@ -187,13 +182,13 @@ const EventoModal = ({ visible, onClose, onGuardar, evento, fechaInicial }) => {
       estado: form.estado || 'PENDIENTE',
       prioridad: form.prioridad || 'Media',
       color_etiqueta: form.color || '#4a6cf7',
-      es_personal: esPersonal, // 🔑 Clave para privacidad
-      visibilidad: form.visibilidad, // Opcional, para referencia
+      es_personal: esPersonal,
+      visibilidad: form.visibilidad,
     };
 
     if (esAdmin && asignarTarea) {
       datosEnvio.asignar_tarea = true;
-      datosEnvio.es_personal = false; // Las tareas asignadas siempre son públicas
+      datosEnvio.es_personal = false;
       datosEnvio.empresa_id = empresaId;
       datosEnvio.categoria_tarea_id = categoriaTareaId;
       datosEnvio.asignado_tarea_id = asignadoTareaId;
@@ -206,7 +201,8 @@ const EventoModal = ({ visible, onClose, onGuardar, evento, fechaInicial }) => {
   if (!visible) return null;
   const esEdicion = !!evento;
 
-  return (
+  // 🔥 2. ENVUELTO EN createPortal PARA SALTAR CUALQUIER RESTRICCIÓN DE CSS DEL PADRE
+  return createPortal(
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
@@ -216,7 +212,6 @@ const EventoModal = ({ visible, onClose, onGuardar, evento, fechaInicial }) => {
           </button>
         </div>
         <form onSubmit={handleSubmit} className="modal-form">
-          {/* Título, Descripción, Fechas, Todo el día */}
           <div className="modal-field">
             <label>Título *</label>
             <input type="text" name="titulo" value={form.titulo} onChange={handleChange} required />
@@ -239,7 +234,6 @@ const EventoModal = ({ visible, onClose, onGuardar, evento, fechaInicial }) => {
             <label><input type="checkbox" name="todo_el_dia" checked={form.todo_el_dia} onChange={handleChange} /> Todo el día</label>
           </div>
 
-          {/* Visibilidad */}
           <div className="modal-field">
             <label>Visibilidad</label>
             <select name="visibilidad" value={form.visibilidad} onChange={handleChange}>
@@ -248,7 +242,6 @@ const EventoModal = ({ visible, onClose, onGuardar, evento, fechaInicial }) => {
             </select>
           </div>
 
-          {/* Asignación de tarea (solo admin) */}
           {esAdmin && (
             <div className="modal-field checkbox-field" style={{ borderTop: '1px solid #e2e8f0', paddingTop: '15px', marginTop: '15px' }}>
               <label style={{ fontWeight: 'bold' }}>
@@ -292,7 +285,6 @@ const EventoModal = ({ visible, onClose, onGuardar, evento, fechaInicial }) => {
             </div>
           )}
 
-          {/* Selectores generales */}
           <div className="modal-row">
             <div className="modal-field">
               <label>Categoría del Calendario</label>
@@ -338,7 +330,8 @@ const EventoModal = ({ visible, onClose, onGuardar, evento, fechaInicial }) => {
           </div>
         </form>
       </div>
-    </div>
+    </div>,
+    document.body // 🔥 3. RENDERIZAMOS EL MODAL DIRECTAMENTE AL FINAL DEL BODY
   );
 };
 

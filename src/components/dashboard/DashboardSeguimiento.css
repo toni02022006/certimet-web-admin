@@ -1,0 +1,83 @@
+/* ============================================
+   DashboardSeguimiento.css
+   ============================================ */
+
+.ss-filtros {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 16px 24px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0,0,0,0.04);
+  margin-bottom: 24px;
+}
+
+.ss-filtros-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 16px;
+}
+
+.ss-filtro-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-width: 150px;
+}
+
+.ss-filtro-group label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.ss-filtro-group input,
+.ss-filtro-group select {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  font-size: 0.9rem;
+  color: #334155;
+  background: #f8fafc;
+  transition: all 0.2s;
+}
+
+.ss-filtro-group input:focus,
+.ss-filtro-group select:focus {
+  border-color: #133a5e;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(19, 58, 94, 0.1);
+}
+
+.ss-btn-export {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #27ae60;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  height: 40px;
+}
+
+.ss-btn-export:hover {
+  background: #219a52;
+}
+
+.ss-row-two-cols {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 1024px) {
+  .ss-row-two-cols { grid-template-columns: 1fr; }
+}
+
+.mt-4 { margin-top: 24px; }

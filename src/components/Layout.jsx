@@ -1,6 +1,7 @@
 import { useContext, useState, useEffect } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import Header from './Header';
 import './Layout.css';
 
 const Icon = ({ path, size = 20 }) => (
@@ -18,7 +19,6 @@ const icons = {
   usuarios: 'M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75',
   blog: 'M4 19.5A2.5 2.5 0 016.5 17H20 M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z',
   productos: 'M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z M3.27 6.96L12 12.01l8.73-5.05 M12 22.08V12',
-  logout: 'M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4 M16 17l5-5-5-5 M21 12H9',
   chevronLeft: 'M15 18l-6-6 6-6',
   asignacion: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z',
   calendario: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z',
@@ -41,7 +41,7 @@ const NAV_ITEMS = [
 ];
 
 const Layout = () => {
-  const { usuario, logout } = useContext(AuthContext);
+  const { usuario } = useContext(AuthContext);
   const location = useLocation();
 
   const [collapsed, setCollapsed] = useState(() => {
@@ -56,111 +56,89 @@ const Layout = () => {
   const esAdmin = usuario?.rol === 'Superadmin' || usuario?.rol === 'Admin';
   const esSuper = usuario?.rol === 'Superadmin';
 
-  // ✅ SOLUCIÓN: Lógica robusta que soporta strings planos u objetos anidados de Prisma
   const canSee = (item) => {
     if (item.roles.includes('*')) return true;
     if (item.roles.includes('Superadmin') && esSuper) return true;
     if (item.roles.includes('Admin') && esAdmin) return true;
     
-    // Verificación de módulos individual
     if (usuario?.modulos && Array.isArray(usuario.modulos)) {
       const tieneModulo = usuario.modulos.some(m => {
-        // Caso 1: Array de strings (ej: ['Gestión de Pedidos'])
         if (typeof m === 'string') return m === item.modulo;
-        
-        // Caso 2: Objeto anidado directo de Prisma (ej: { modulo: { nombre: 'Gestión de Pedidos' } })
         if (m.modulo?.nombre) return m.modulo.nombre === item.modulo;
-        
-        // Caso 3: Objeto aplanado (ej: { id: 10, nombre: 'Gestión de Pedidos' })
         if (m.nombre) return m.nombre === item.modulo;
-        
         return false;
       });
-
       if (tieneModulo) return true;
     }
-
     return false;
   };
 
   return (
     <div className="cm-container">
       <aside className={`cm-sidebar ${collapsed ? 'cm-collapsed' : ''}`}>
-        <button
-          className="cm-toggle"
-          onClick={() => setCollapsed(!collapsed)}
-          title={collapsed ? 'Expandir menú' : 'Contraer menú'}
-        >
-          <Icon path={icons.chevronLeft} size={16} />
-        </button>
-
-        <div className="cm-logo-area">
-          {collapsed ? (
-            <span className="cm-logo-mini">C</span>
-          ) : (
-            <>
-              <span className="cm-logo-accent">CERTIMET</span>&nbsp;
-            </>
-          )}
+        
+        {/* Cabecera del Sidebar */}
+        <div className="cm-sidebar-header">
+          <div className="cm-logo-area">
+            {collapsed ? (
+              <span className="cm-logo-mini">C</span>
+            ) : (
+              <span className="cm-logo-accent">CERTIMET</span>
+            )}
+          </div>
+          
+          <button
+            className="cm-toggle"
+            onClick={() => setCollapsed(!collapsed)}
+            title={collapsed ? 'Expandir menú' : 'Contraer menú'}
+          >
+            <Icon path={icons.chevronLeft} size={16} />
+          </button>
         </div>
 
-        <nav className="cm-nav">
-          {NAV_ITEMS.filter((item) => canSee(item)).map((item) => {
-            const isActive = location.pathname === item.to;
-            return (
-              <Link
-                key={item.to}
-                to={item.to}
-                className={`cm-navlink ${isActive ? 'active' : ''}`}
-                title={collapsed ? item.label : ''}
-              >
-                <Icon path={item.icon} size={19} />
-                <span className="cm-label">{item.label}</span>
-              </Link>
-            );
-          })}
-        </nav>
+        {/* Navegación con Scrollbar personalizado */}
+        <div className="cm-nav-scroll-wrapper">
+          <nav className="cm-nav">
+            {NAV_ITEMS.filter((item) => canSee(item)).map((item) => {
+              const isActive = location.pathname === item.to;
+              return (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  className={`cm-navlink ${isActive ? 'active' : ''}`}
+                  title={collapsed ? item.label : ''}
+                >
+                  <Icon path={item.icon} size={20} />
+                  <span className="cm-label">{item.label}</span>
+                  {/* Bolita de notificación simulada en Marketing (opcional, solo para mostrar UX) */}
+                  {item.label === 'Marketing' && !collapsed}
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
 
-        <div className="cm-userbox">
-          <div className="cm-userbox-row">
+        {/* Pie del Sidebar: Usuario */}
+        <div className="cm-userbox-wrapper">
+          <div className="cm-userbox">
             <div className="cm-avatar">
-              {usuario?.nombre?.charAt(0)?.toUpperCase() || 'U'}
+              {usuario?.nombre?.charAt(0)?.toUpperCase() || 'A'}
             </div>
             {!collapsed && (
               <div className="cm-userbox-info">
-                <div className="cm-userbox-name">{usuario?.nombre}</div>
-                <div className="cm-userbox-role">{usuario?.rol}</div>
+                <div className="cm-userbox-name">{usuario?.nombre || 'Anthoni'}</div>
+                <div className="cm-userbox-role">{usuario?.rol || 'Superadmin'}</div>
               </div>
             )}
           </div>
         </div>
+
       </aside>
 
       <div className="cm-main">
-        <header className="cm-header">
-          <div className="cm-header-left">
-            <span className="cm-header-icon">
-              <Icon path={icons.dashboard} size={20} />
-            </span>
-            <div className="cm-header-userinfo">
-              Bienvenido, <strong>{usuario?.nombre}</strong>
-              <span className="cm-role-badge">{usuario?.rol}</span>
-            </div>
-          </div>
-
-          <div className="cm-header-right">
-            <div className="cm-header-actions">
-              <button className="cm-notif-btn" title="Notificaciones">
-                <Icon path="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0" size={20} />
-                <span className="cm-notif-badge">3</span>
-              </button>
-            </div>
-            <button onClick={logout} className="cm-logout-btn">
-              <Icon path={icons.logout} size={16} />
-              Salir
-            </button>
-          </div>
-        </header>
+        {/* Componente Header reutilizado */}
+        <Header />
+        
         <main className="cm-content">
           <div className="cm-fade-in" key={location.pathname}>
             <Outlet />

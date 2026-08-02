@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Swal from 'sweetalert2'; // <-- Importamos SweetAlert2
+import { createPortal } from 'react-dom'; // 🔥 1. IMPORTAMOS CREATEPORTAL
+import Swal from 'sweetalert2';
 import './Plantillas.css';
 
 // Mismo IconEdit que se usa en Productos
@@ -174,7 +175,6 @@ const Plantillas = ({ onApplyTemplate }) => {
               </div>
               <div className="plantilla-card-footer">
                 <div className="acciones-crud">
-                  {/* Botón de editar con el mismo SVG que en Productos */}
                   <button className="btn-icon editar" onClick={() => abrirModalEditar(p)}>
                     <IconEdit />
                   </button>
@@ -188,8 +188,8 @@ const Plantillas = ({ onApplyTemplate }) => {
         </div>
       )}
 
-      {/* --- MODAL PARA CREAR/EDITAR --- */}
-      {mostrarModal && (
+      {/* --- MODAL PARA CREAR/EDITAR ENVUELTO EN CREATEPORTAL --- */}
+      {mostrarModal && createPortal(
         <div className="modal-overlay">
           <div className="modal-contenido">
             <h3>{plantillaEditando ? '✏️ Editar Plantilla' : 'Nueva Plantilla'}</h3>
@@ -234,7 +234,8 @@ const Plantillas = ({ onApplyTemplate }) => {
               </div>
             </form>
           </div>
-        </div>
+        </div>,
+        document.body // 🔥 2. LO RENDERIZAMOS EN EL BODY
       )}
     </div>
   );

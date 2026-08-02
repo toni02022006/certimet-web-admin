@@ -1,0 +1,214 @@
+/* ============================================
+   Header.css
+   ============================================ */
+.cm-header {
+  /* Usando los mismos colores exactos del Sidebar para unificar el diseño */
+  background: linear-gradient(90deg, #0a1e33 0%, #133a5e 100%);
+  padding: 14px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 76px;
+  /* Borde sutil para separar suavemente del contenido */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 20px rgba(10, 30, 50, 0.1);
+  position: relative;
+  z-index: 5;
+  color: #ffffff;
+}
+
+/* --- Lado Izquierdo --- */
+.cm-header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+}
+
+.cm-breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+}
+
+.cm-breadcrumb-separator {
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 1rem;
+}
+
+.cm-breadcrumb-current {
+  color: #ffffff;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+/* --- Centro: Widget de Reloj --- */
+.cm-header-center {
+  display: flex;
+  justify-content: center;
+  flex: 1;
+}
+
+.cm-widget-clock {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 6px 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px);
+}
+
+.cm-widget-clock svg {
+  color: #5dade2; /* Acento azul claro de Certimet */
+}
+
+.cm-date {
+  font-weight: 400;
+}
+
+.cm-time-divider {
+  color: rgba(255, 255, 255, 0.3);
+  margin: 0 4px;
+}
+
+.cm-time {
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+}
+
+/* --- Lado Derecho --- */
+.cm-header-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 20px;
+  flex: 1;
+}
+
+/* Widget de estado del sistema */
+.cm-widget-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.cm-status-dot {
+  width: 8px;
+  height: 8px;
+  background-color: #2ecc71; /* Acento verde de Certimet */
+  border-radius: 50%;
+  box-shadow: 0 0 0 rgba(46, 204, 113, 0.4);
+  animation: pulse-green 2s infinite;
+}
+
+@keyframes pulse-green {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(46, 204, 113, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(46, 204, 113, 0); }
+}
+
+/* --- Agrupador de Perfil y Salida --- */
+.cm-profile-dropdown {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-left: 16px;
+  border-left: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.cm-header-userinfo {
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.85);
+  white-space: nowrap;
+}
+
+.cm-greeting {
+  color: rgba(255, 255, 255, 0.6);
+  margin-right: 4px;
+}
+
+.cm-header-userinfo strong {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.cm-header-userinfo .cm-role-badge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(4px);
+  color: #ffffff;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 2px 14px;
+  border-radius: 30px;
+  margin-left: 10px;
+  letter-spacing: 0.3px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cm-logout-icon-btn {
+  background: rgba(231, 76, 60, 0.15);
+  border: 1px solid rgba(231, 76, 60, 0.3);
+  color: #ff7675;
+  cursor: pointer;
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.cm-logout-icon-btn:hover {
+  background: #e74c3c;
+  color: #ffffff;
+  border-color: #e74c3c;
+  transform: translateX(2px);
+}
+
+/* --- Responsive Header --- */
+@media (max-width: 992px) {
+  .cm-date {
+    display: none; /* Ocultamos la fecha en tablets para ahorrar espacio */
+  }
+  .cm-time-divider {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .cm-header {
+    padding: 12px 16px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .cm-header-left, .cm-header-center, .cm-header-right {
+    flex: initial;
+  }
+  .cm-header-userinfo strong {
+    display: block;
+  }
+  .cm-header-center {
+    order: 3; /* Mandamos el reloj abajo en móviles */
+    width: 100%;
+  }
+  .cm-profile-dropdown {
+    border-left: none;
+    padding-left: 0;
+  }
+}

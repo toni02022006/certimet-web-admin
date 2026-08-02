@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Swal from 'sweetalert2'; // <-- Importamos SweetAlert2
+import { createPortal } from 'react-dom'; // <-- Importamos createPortal (del local)
+import Swal from 'sweetalert2';
 import './Plantillas.css';
 
 // Definimos la URL base para producción (Compatible con Vite)
@@ -191,8 +192,8 @@ const Plantillas = ({ onApplyTemplate }) => {
         </div>
       )}
 
-      {/* --- MODAL PARA CREAR/EDITAR --- */}
-      {mostrarModal && (
+      {/* --- MODAL PARA CREAR/EDITAR ENVUELTO EN CREATEPORTAL --- */}
+      {mostrarModal && createPortal(
         <div className="modal-overlay">
           <div className="modal-contenido">
             <h3>{plantillaEditando ? '✏️ Editar Plantilla' : 'Nueva Plantilla'}</h3>
@@ -237,7 +238,8 @@ const Plantillas = ({ onApplyTemplate }) => {
               </div>
             </form>
           </div>
-        </div>
+        </div>,
+        document.body // <-- Renderizado en el body para evitar conflictos de z-index
       )}
     </div>
   );

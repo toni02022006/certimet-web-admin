@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { createPortal } from 'react-dom'; // 🔥 1. Importamos createPortal para el entorno de producción
 import { AuthContext } from '../../context/AuthContext';
-// <-- 1. Agregamos "api" a tus importaciones existentes
 import api, {
   obtenerPracticantes,
   obtenerEmpresas,
@@ -48,7 +48,6 @@ const EventoModal = ({ visible, onClose, onGuardar, evento, fechaInicial }) => {
   const [prioridades, setPrioridades] = useState([]);
   const [cargandoOpciones, setCargandoOpciones] = useState(false);
 
-  // <-- 2. Reemplazamos los fetch directos por api.get
   useEffect(() => {
     const fetchOpciones = async () => {
       setCargandoOpciones(true);
@@ -206,7 +205,8 @@ const EventoModal = ({ visible, onClose, onGuardar, evento, fechaInicial }) => {
   if (!visible) return null;
   const esEdicion = !!evento;
 
-  return (
+  // 🔥 2. ENVUELTO EN createPortal PARA SALTAR CUALQUIER RESTRICCIÓN DE CSS DEL PADRE
+  return createPortal(
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
@@ -338,7 +338,8 @@ const EventoModal = ({ visible, onClose, onGuardar, evento, fechaInicial }) => {
           </div>
         </form>
       </div>
-    </div>
+    </div>,
+    document.body // 🔥 3. Renderizamos el modal directamente al final del body
   );
 };
 

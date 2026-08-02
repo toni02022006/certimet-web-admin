@@ -1,6 +1,22 @@
 /* ============================================
-   Layout.css – versión mejorada (CERTIMET)
+   Layout.css – Certimet Premium Theme
    ============================================ */
+
+:root {
+  /* Paleta de Colores Certimet */
+  --cm-blue-dark: #0a1e33;
+  --cm-blue-main: #133a5e;
+  --cm-blue-light: #1a5276;
+  --cm-blue-accent: #5dade2;
+  --cm-green-accent: #2ecc71; /* El toque de verde */
+  --cm-bg-app: #f0f4f9;
+  
+  /* Variables estructurales */
+  --sidebar-width: 270px;
+  --sidebar-width-collapsed: 80px;
+  --transition-speed: 0.35s;
+  --easing: cubic-bezier(0.25, 1, 0.5, 1);
+}
 
 * {
   margin: 0;
@@ -11,7 +27,7 @@
 body, html {
   height: 100%;
   font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
-  background: #f0f4f9;
+  background: var(--cm-bg-app);
 }
 
 .cm-container {
@@ -21,203 +37,292 @@ body, html {
   overflow: hidden;
 }
 
-/* ========== SIDEBAR ========== */
+/* ========== SIDEBAR ESTILIZADO ========== */
 .cm-sidebar {
-  background: linear-gradient(165deg, #0a1e33 0%, #154360 40%, #1a5276 100%);
+  background: linear-gradient(180deg, var(--cm-blue-dark) 0%, var(--cm-blue-main) 100%);
   color: #ffffff;
-  width: 260px;
-  min-width: 260px;
+  width: var(--sidebar-width);
+  min-width: var(--sidebar-width);
   height: 100vh;
   display: flex;
   flex-direction: column;
-  transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1), min-width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 4px 0 20px rgba(10, 30, 50, 0.25);
+  transition: width var(--transition-speed) var(--easing), min-width var(--transition-speed) var(--easing);
+  box-shadow: 4px 0 24px rgba(10, 30, 50, 0.15);
   position: relative;
   flex-shrink: 0;
   overflow: hidden;
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .cm-sidebar.cm-collapsed {
-  width: 72px;
-  min-width: 72px;
+  width: var(--sidebar-width-collapsed);
+  min-width: var(--sidebar-width-collapsed);
 }
 
-/* Botón toggle con estilo moderno */
+/* Cabecera del Sidebar (Logo + Botón) */
+.cm-sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 20px;
+  min-height: 84px;
+  position: relative;
+}
+
+.cm-logo-area {
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  transition: opacity 0.2s;
+}
+
+.cm-logo-accent {
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+.cm-logo-mini {
+  font-size: 1.8rem;
+  color: var(--cm-blue-accent);
+  background: rgba(255, 255, 255, 0.05);
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.cm-sidebar.cm-collapsed .cm-sidebar-header {
+  justify-content: center;
+  padding: 24px 0;
+}
+
+/* Botón toggle moderno */
 .cm-toggle {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(4px);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.15);
   color: #ffffff;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.25s ease;
-  z-index: 10;
+  transition: all 0.2s ease;
 }
+
 .cm-toggle:hover {
-  background: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.25);
   transform: scale(1.05);
 }
+
 .cm-sidebar.cm-collapsed .cm-toggle {
-  transform: rotate(180deg);
+  position: absolute;
+  bottom: -40px; /* Lo ocultamos o movemos en modo colapsado si queremos, pero lo dejamos centrado */
   right: 50%;
   transform: translateX(50%) rotate(180deg);
+  bottom: 20px; /* Movido abajo para que no estorbe el logo mini */
+  z-index: 100;
 }
 
-/* Logo */
-.cm-logo-area {
-  padding: 24px 20px 18px;
-  font-size: 1.3rem;
-  font-weight: 700;
-  letter-spacing: 0.3px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  display: flex;
-  align-items: center;
-  min-height: 80px;
-  white-space: nowrap;
-  color: #ffffff;
-}
-.cm-logo-accent {
-  color: #5dade2;
-}
-.cm-logo-mini {
-  font-size: 2rem;
-  font-weight: 800;
-  color: #5dade2;
-  background: rgba(255, 255, 255, 0.05);
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.cm-sidebar.cm-collapsed .cm-logo-area {
-  justify-content: center;
-  padding: 20px 0 16px;
-}
-
-/* Navegación */
-.cm-nav {
+/* Área de Navegación + Custom Scrollbar */
+.cm-nav-scroll-wrapper {
   flex: 1;
-  padding: 20px 12px 12px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 10px 0;
+}
+
+/* Custom Scrollbar para el menú */
+.cm-nav-scroll-wrapper::-webkit-scrollbar {
+  width: 6px;
+}
+.cm-nav-scroll-wrapper::-webkit-scrollbar-track {
+  background: transparent;
+}
+.cm-nav-scroll-wrapper::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+}
+.cm-nav-scroll-wrapper::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.cm-nav {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  overflow-y: auto;
+  gap: 6px;
 }
 
+/* Enlaces estilo "Píldora Flotante" */
 .cm-navlink {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
   padding: 12px 16px;
+  margin: 0 16px;
   border-radius: 10px;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.65);
   text-decoration: none;
   transition: all 0.2s ease;
   white-space: nowrap;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   font-weight: 500;
   position: relative;
+  overflow: hidden;
 }
+
 .cm-navlink:hover {
-  background: rgba(255, 255, 255, 0.07);
   color: #ffffff;
+  background: rgba(255, 255, 255, 0.06);
+  transform: translateX(4px);
 }
+
+/* ESTADO ACTIVO - El toque verde */
 .cm-navlink.active {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.1);
   color: #ffffff;
-  box-shadow: inset 4px 0 0 #5dade2;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
+
 .cm-navlink.active::before {
   content: '';
   position: absolute;
   left: 0;
-  top: 8px;
-  bottom: 8px;
-  width: 3px;
-  background: #5dade2;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 60%;
+  width: 4px;
+  background: var(--cm-green-accent); /* Acento verde */
   border-radius: 0 4px 4px 0;
+  box-shadow: 0 0 10px rgba(46, 204, 113, 0.6);
 }
+
 .cm-navlink svg {
   flex-shrink: 0;
-  opacity: 0.9;
-}
-.cm-navlink .cm-label {
-  transition: opacity 0.2s;
+  transition: color 0.2s;
 }
 
-.cm-sidebar.cm-collapsed .cm-navlink {
-  justify-content: center;
-  padding: 12px 0;
+.cm-navlink.active svg {
+  color: var(--cm-green-accent);
 }
-.cm-sidebar.cm-collapsed .cm-navlink .cm-label {
+
+.cm-label {
+  transition: opacity 0.2s;
+  flex: 1;
+}
+
+/* Badge opcional de "Nuevo" */
+.cm-nav-badge {
+  background: var(--cm-blue-accent);
+  color: #fff;
+  font-size: 0.65rem;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* Navegación colapsada */
+.cm-sidebar.cm-collapsed .cm-navlink {
+  margin: 0 12px;
+  justify-content: center;
+  padding: 14px 0;
+}
+.cm-sidebar.cm-collapsed .cm-navlink:hover {
+  transform: translateY(-2px); /* Hover diferente en colapsado */
+}
+.cm-sidebar.cm-collapsed .cm-navlink .cm-label,
+.cm-sidebar.cm-collapsed .cm-nav-badge {
   display: none;
 }
-.cm-sidebar.cm-collapsed .cm-navlink svg {
-  margin: 0;
+.cm-sidebar.cm-collapsed .cm-navlink::before {
+  height: 40%;
+  width: 3px;
 }
 
-/* Caja de usuario */
-.cm-userbox {
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 16px 20px;
-  margin-top: 4px;
+/* Caja de usuario inferior (Footer del Sidebar) */
+.cm-userbox-wrapper {
+  padding: 20px 16px;
+  background: linear-gradient(to top, rgba(10, 30, 51, 0.9) 0%, rgba(10, 30, 51, 0) 100%);
 }
-.cm-userbox-row {
+
+.cm-userbox {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 10px;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s;
 }
+
+.cm-userbox:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
 .cm-avatar {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #2e86c1, #5dade2);
+  width: 40px;
+  height: 40px;
+  border-radius: 10px; /* Cuadrado redondeado es más moderno que círculo */
+  background: var(--cm-blue-accent);
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
   color: white;
   flex-shrink: 0;
-  font-size: 1rem;
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  font-size: 1.1rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
+
 .cm-userbox-info {
   overflow: hidden;
 }
+
 .cm-userbox-name {
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: #ffffff;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 .cm-userbox-role {
-  font-size: 0.7rem;
-  color: rgba(255, 255, 255, 0.5);
-  text-transform: uppercase;
-  letter-spacing: 0.6px;
+  font-size: 0.75rem;
+  color: var(--cm-green-accent); /* Rango en verde sutil */
   font-weight: 500;
+  margin-top: 2px;
 }
-.cm-sidebar.cm-collapsed .cm-userbox-row {
+
+.cm-sidebar.cm-collapsed .cm-userbox-wrapper {
+  padding: 20px 10px;
+}
+.cm-sidebar.cm-collapsed .cm-userbox {
   justify-content: center;
+  padding: 10px 0;
+  background: transparent;
+  border: none;
 }
 .cm-sidebar.cm-collapsed .cm-userbox-info {
   display: none;
 }
-.cm-sidebar.cm-collapsed .cm-userbox {
-  padding: 16px 0;
+.cm-sidebar.cm-collapsed .cm-avatar {
+  width: 36px;
+  height: 36px;
 }
 
 /* ========== MAIN CONTENT ========== */
@@ -226,295 +331,43 @@ body, html {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: #f4f8fe;
+  background: var(--cm-bg-app);
   overflow: hidden;
 }
 
-/* HEADER mejorado */
-.cm-header {
-  background: #ffffff;
-  padding: 14px 32px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 76px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
-  box-shadow: 0 2px 12px rgba(0, 20, 40, 0.04);
-  backdrop-filter: blur(2px);
-  position: relative;
-  z-index: 5;
-}
-
-.cm-header-left {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.cm-header-icon {
-  color: #1a5276;
-  opacity: 0.6;
-}
-
-.cm-header-userinfo {
-  font-size: 0.95rem;
-  color: #2c3e50;
-  font-weight: 400;
-}
-.cm-header-userinfo strong {
-  color: #0a2a4a;
-  font-weight: 600;
-}
-.cm-header-userinfo .cm-role-badge {
-  display: inline-block;
-  background: #eaf2f8;
-  color: #1a5276;
-  font-size: 0.7rem;
-  font-weight: 600;
-  padding: 2px 12px;
-  border-radius: 20px;
-  margin-left: 8px;
-  letter-spacing: 0.3px;
-}
-
-.cm-header-right {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-
-.cm-header-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.cm-notif-btn {
-  background: transparent;
-  border: none;
-  color: #5b6f82;
-  cursor: pointer;
-  padding: 6px;
-  border-radius: 50%;
-  transition: background 0.2s;
-  position: relative;
-}
-.cm-notif-btn:hover {
-  background: #f0f4f9;
-  color: #1a5276;
-}
-.cm-notif-badge {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 18px;
-  height: 18px;
-  background: #e74c3c;
-  color: white;
-  font-size: 0.6rem;
-  font-weight: 700;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid white;
-}
-
-.cm-logout-btn {
-  background: transparent;
-  border: 1px solid #e0e6ed;
-  color: #3d4f5f;
-  padding: 8px 20px;
-  border-radius: 40px;
-  font-size: 0.8rem;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  transition: all 0.25s ease;
-}
-.cm-logout-btn:hover {
-  background: #fef0f0;
-  border-color: #f5c6c6;
-  color: #c0392b;
-  box-shadow: 0 2px 8px rgba(192, 57, 43, 0.08);
-}
-
-/* Contenido */
 .cm-content {
   flex: 1;
-  padding: 28px 32px;
+  padding: 32px 40px; /* Más respiro para las tablas y formularios */
   overflow-y: auto;
-  background: #f4f8fe;
 }
 
 .cm-fade-in {
-  animation: cmFadeIn 0.35s ease-in-out;
+  animation: cmFadeIn 0.4s ease-out forwards;
 }
 
 @keyframes cmFadeIn {
-  0% { opacity: 0; transform: translateY(10px); }
-  100% { opacity: 1; transform: translateY(0); }
+  0% { opacity: 0; transform: translateY(15px); }
+  100% { opacity: 1; transform: none; } /* ✅ MAGIA: Libera los modales para que cubran toda la pantalla */
 }
 
 /* ========== RESPONSIVE ========== */
 @media (max-width: 768px) {
   .cm-sidebar {
-    width: 72px;
-    min-width: 72px;
-  }
-  .cm-sidebar .cm-label,
-  .cm-sidebar .cm-logo-area:not(.cm-logo-mini),
-  .cm-sidebar .cm-userbox-info {
-    display: none;
-  }
-  .cm-sidebar .cm-navlink {
-    justify-content: center;
-    padding: 12px 0;
-  }
-  .cm-sidebar .cm-logo-area {
-    justify-content: center;
-    padding: 20px 0 16px;
-  }
-  .cm-sidebar .cm-toggle {
-    right: 50%;
-    transform: translateX(50%);
+    position: fixed;
+    z-index: 1000;
+    height: 100%;
   }
   .cm-sidebar.cm-collapsed {
-    width: 0;
-    min-width: 0;
-    padding: 0;
-    overflow: hidden;
+    transform: translateX(-100%);
+    width: var(--sidebar-width); /* Mantiene el ancho original al esconderse */
   }
   .cm-sidebar.cm-collapsed .cm-toggle {
-    display: none;
+    display: flex;
+    right: -40px; /* El botón sale del sidebar para poder abrirlo */
+    transform: rotate(0deg);
+    background: var(--cm-blue-main);
   }
-  .cm-main {
-    margin-left: 0;
+  .cm-content {
+    padding: 20px 16px;
   }
-  .cm-header {
-    padding: 12px 16px;
-    flex-wrap: wrap;
-  }
-  .cm-header-userinfo strong {
-    display: block;
-  }
-  .cm-header-right {
-    gap: 10px;
-  }
-}
-/* ========== HEADER CON COLOR ========== */
-.cm-header {
-  background: linear-gradient(135deg, #0a2a4a 0%, #1a5276 80%);
-  padding: 14px 32px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 76px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 2px 12px rgba(0, 20, 40, 0.15);
-  position: relative;
-  z-index: 5;
-  color: #ffffff;
-}
-
-.cm-header-left {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.cm-header-icon {
-  color: rgba(255, 255, 255, 0.6);
-  opacity: 0.8;
-}
-
-.cm-header-userinfo {
-  font-size: 0.95rem;
-  font-weight: 400;
-  color: rgba(255, 255, 255, 0.85);
-}
-.cm-header-userinfo strong {
-  color: #ffffff;
-  font-weight: 600;
-}
-.cm-header-userinfo .cm-role-badge {
-  display: inline-block;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(4px);
-  color: #ffffff;
-  font-size: 0.7rem;
-  font-weight: 600;
-  padding: 2px 14px;
-  border-radius: 30px;
-  margin-left: 10px;
-  letter-spacing: 0.3px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.cm-header-right {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-
-.cm-header-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.cm-notif-btn {
-  background: rgba(255, 255, 255, 0.08);
-  border: none;
-  color: #ffffff;
-  cursor: pointer;
-  padding: 8px;
-  border-radius: 50%;
-  transition: background 0.2s;
-  position: relative;
-}
-.cm-notif-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-  color: #ffffff;
-}
-.cm-notif-badge {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 18px;
-  height: 18px;
-  background: #e74c3c;
-  color: white;
-  font-size: 0.6rem;
-  font-weight: 700;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid #1a5276;
-}
-
-/* Botón logout sobre fondo oscuro */
-.cm-logout-btn {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(4px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #ffffff;
-  padding: 8px 20px;
-  border-radius: 40px;
-  font-size: 0.8rem;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  transition: all 0.25s ease;
-}
-.cm-logout-btn:hover {
-  background: rgba(255, 255, 255, 0.18);
-  border-color: rgba(255, 255, 255, 0.5);
-  color: #ffffff;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
-  transform: translateY(-1px);
 }

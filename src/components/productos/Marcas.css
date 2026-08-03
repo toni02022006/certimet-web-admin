@@ -1,0 +1,230 @@
+/* ==============================
+   MarcasList
+============================== */
+.ml-container {
+  padding: 24px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.ml-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.ml-header h2 {
+  font-size: 1.8rem;
+  color: #1e293b;
+  margin: 0;
+}
+
+.ml-btn {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition: background 0.2s;
+}
+
+.ml-btn-primary {
+  background: #2563eb;
+  color: #fff;
+}
+.ml-btn-primary:hover {
+  background: #1d4ed8;
+}
+
+.ml-btn-edit {
+  background: #eab308;
+  color: #000;
+  margin-right: 8px;
+}
+.ml-btn-edit:hover {
+  background: #ca8a04;
+}
+
+.ml-btn-delete {
+  background: #dc2626;
+  color: #fff;
+}
+.ml-btn-delete:hover {
+  background: #b91c1c;
+}
+
+.ml-table-wrapper {
+  overflow-x: auto;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.ml-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.ml-table th {
+  background: #f1f5f9;
+  color: #334155;
+  font-weight: 600;
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.ml-table td {
+  padding: 10px 16px;
+  border-bottom: 1px solid #e2e8f0;
+  vertical-align: middle;
+}
+
+.ml-table tr:hover td {
+  background: #f8fafc;
+}
+
+.ml-logo-thumb {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  border-radius: 4px;
+  background: #f1f5f9;
+}
+
+.ml-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+.ml-active {
+  background: #dcfce7;
+  color: #166534;
+}
+.ml-inactive {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.ml-loading {
+  text-align: center;
+  padding: 40px;
+  color: #64748b;
+}
+
+/* ==============================
+   MarcaForm
+============================== */
+.mf-container {
+  max-width: 600px;
+  margin: 24px auto;
+  padding: 24px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+
+.mf-container h2 {
+  font-size: 1.6rem;
+  color: #0f172a;
+  margin-bottom: 24px;
+}
+
+.mf-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.mf-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mf-group label {
+  font-weight: 500;
+  color: #1e293b;
+}
+
+.mf-group input[type="text"],
+.mf-group input[type="file"] {
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border 0.2s;
+}
+.mf-group input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+}
+
+.mf-logo-preview {
+  margin-top: 8px;
+}
+.mf-logo-preview img {
+  max-width: 150px;
+  max-height: 150px;
+  object-fit: contain;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 4px;
+}
+
+.mf-checkbox {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+.mf-checkbox label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.mf-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.mf-btn {
+  padding: 10px 24px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-size: 1rem;
+}
+
+.mf-btn-cancel {
+  background: #e2e8f0;
+  color: #1e293b;
+}
+.mf-btn-cancel:hover {
+  background: #cbd5e1;
+}
+
+.mf-btn-submit {
+  background: #2563eb;
+  color: #fff;
+}
+.mf-btn-submit:hover:not(:disabled) {
+  background: #1d4ed8;
+}
+.mf-btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

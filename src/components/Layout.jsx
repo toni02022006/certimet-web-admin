@@ -38,7 +38,18 @@ const NAV_ITEMS = [
   { to: '/seguimiento-super', label: 'Seguimiento (Super)', icon: icons.seguimientoSuper, roles: ['Superadmin'], modulo: 'Seguimiento (Super)' },
   { to: '/usuarios', label: 'Gestión de Usuarios', icon: icons.usuarios, roles: ['Superadmin'], modulo: 'Gestión de Usuarios' },
   { to: '/blog', label: 'Gestión de Blog', icon: icons.blog, roles: ['Superadmin', 'Admin'], modulo: 'Gestión de Blog' },
-  { to: '/productos', label: 'Gestión de Productos', icon: icons.productos, roles: ['Superadmin', 'Admin'], modulo: 'Gestión de Productos' },
+  // 👇 Ítem con submenú
+  {
+    label: 'Gestión de Productos',
+    icon: icons.productos,
+    roles: ['Superadmin', 'Admin'],
+    modulo: 'Gestión de Productos',
+    children: [
+      { to: '/productos', label: 'Productos' },
+      { to: '/productos/categorias', label: 'Categorías' },
+      { to: '/productos/marcas', label: 'Marcas' }
+    ]
+  },
   { to: '/marketing', label: 'Marketing', icon: icons.marketing, roles: ['Superadmin', 'Admin'], modulo: 'Marketing' },
   { to: '/seo', label: 'SEO', icon: icons.seo, roles: ['Superadmin', 'Admin'], modulo: 'SEO' },
   { to: '/paginas', label: 'Páginas', icon: icons.paginas, roles: ['Superadmin', 'Admin'], modulo: 'PAGINAS' },
@@ -47,11 +58,12 @@ const NAV_ITEMS = [
 const Layout = () => {
   const { usuario } = useContext(AuthContext);
   const location = useLocation();
-
   const [collapsed, setCollapsed] = useState(() => {
     const saved = localStorage.getItem('certimet_sidebar_collapsed');
     return saved === 'true';
   });
+  // Estado para controlar qué ítem con hijos está expandido
+  const [expandedItem, setExpandedItem] = useState(null);
 
   useEffect(() => {
     localStorage.setItem('certimet_sidebar_collapsed', collapsed);
@@ -61,10 +73,9 @@ const Layout = () => {
   const esSuper = usuario?.rol === 'Superadmin';
 
   const canSee = (item) => {
-    if (item.roles.includes('*')) return true;
-    if (item.roles.includes('Superadmin') && esSuper) return true;
-    if (item.roles.includes('Admin') && esAdmin) return true;
-    
+    if (item.roles?.includes('*')) return true;
+    if (item.roles?.includes('Superadmin') && esSuper) return true;
+    if (item.roles?.includes('Admin') && esAdmin) return true;
     if (usuario?.modulos && Array.isArray(usuario.modulos)) {
       const tieneModulo = usuario.modulos.some(m => {
         if (typeof m === 'string') return m === item.modulo;
@@ -77,11 +88,71 @@ const Layout = () => {
     return false;
   };
 
+  const toggleExpand = (label) => {
+    setExpandedItem(expandedItem === label ? null : label);
+  };
+
+  // Renderizar un ítem de navegación (puede tener hijos)
+  const renderNavItem = (item, depth = 0) => {
+    const isActive = item.to && location.pathname === item.to;
+    const hasChildren = item.children && item.children.length > 0;
+    const isExpanded = expandedItem === item.label;
+
+    if (!canSee(item)) return null;
+
+    return (
+      <div key={item.label || item.to} className="cm-nav-item-wrapper">
+        <div
+          className={`cm-navlink ${isActive ? 'active' : ''} ${hasChildren ? 'has-children' : ''}`}
+          onClick={() => {
+            if (hasChildren) {
+              if (!collapsed) toggleExpand(item.label);
+              // Si está colapsado, quizás quieras expandir automáticamente? 
+              // Por simplicidad, no hacemos nada.
+            } else if (item.to) {
+              // Navegar
+              window.location.href = item.to; // o usar navigate de react-router
+            }
+          }}
+          title={collapsed ? item.label : ''}
+        >
+          <Icon path={item.icon} size={20} />
+          {!collapsed && (
+            <>
+              <span className="cm-label">{item.label}</span>
+              {hasChildren && (
+                <span className={`cm-arrow ${isExpanded ? 'open' : ''}`}>
+                  ▾
+                </span>
+              )}
+            </>
+          )}
+        </div>
+
+        {!collapsed && hasChildren && isExpanded && (
+          <div className="cm-subnav">
+            {item.children.map(child => {
+              const childActive = location.pathname === child.to;
+              return (
+                <Link
+                  key={child.to}
+                  to={child.to}
+                  className={`cm-navlink cm-subnavlink ${childActive ? 'active' : ''}`}
+                >
+                  <span className="cm-label">{child.label}</span>
+                </Link>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    );
+  };
+
   return (
     <div className="cm-container">
       <aside className={`cm-sidebar ${collapsed ? 'cm-collapsed' : ''}`}>
-        
-        {/* Cabecera del Sidebar */}
+        {/* Cabecera del Sidebar (igual) */}
         <div className="cm-sidebar-header">
           <div className="cm-logo-area">
             {collapsed ? (
@@ -90,39 +161,19 @@ const Layout = () => {
               <span className="cm-logo-accent">CERTIMET</span>
             )}
           </div>
-          
-          <button
-            className="cm-toggle"
-            onClick={() => setCollapsed(!collapsed)}
-            title={collapsed ? 'Expandir menú' : 'Contraer menú'}
-          >
+          <button className="cm-toggle" onClick={() => setCollapsed(!collapsed)} title={collapsed ? 'Expandir menú' : 'Contraer menú'}>
             <Icon path={icons.chevronLeft} size={16} />
           </button>
         </div>
 
-        {/* Navegación con Scrollbar personalizado */}
+        {/* Navegación */}
         <div className="cm-nav-scroll-wrapper">
           <nav className="cm-nav">
-            {NAV_ITEMS.filter((item) => canSee(item)).map((item) => {
-              const isActive = location.pathname === item.to;
-              return (
-                <Link
-                  key={item.to}
-                  to={item.to}
-                  className={`cm-navlink ${isActive ? 'active' : ''}`}
-                  title={collapsed ? item.label : ''}
-                >
-                  <Icon path={item.icon} size={20} />
-                  <span className="cm-label">{item.label}</span>
-                  {/* Bolita de notificación simulada en Marketing (opcional, solo para mostrar UX) */}
-                  {item.label === 'Marketing' && !collapsed}
-                </Link>
-              );
-            })}
+            {NAV_ITEMS.map(item => renderNavItem(item))}
           </nav>
         </div>
 
-        {/* Pie del Sidebar: Usuario */}
+        {/* Pie del Sidebar (igual) */}
         <div className="cm-userbox-wrapper">
           <div className="cm-userbox">
             <div className="cm-avatar">
@@ -136,13 +187,10 @@ const Layout = () => {
             )}
           </div>
         </div>
-
       </aside>
 
       <div className="cm-main">
-        {/* Componente Header reutilizado */}
         <Header />
-        
         <main className="cm-content">
           <div className="cm-fade-in" key={location.pathname}>
             <Outlet />

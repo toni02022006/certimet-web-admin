@@ -23,6 +23,14 @@ import MarketingView from './views/MarketingView';
 import Seo from './views/Seo';
 import Paginas from './views/Paginas';
 
+// ============================================================
+// 👇 NUEVOS IMPORTS PARA CATEGORÍAS Y MARCAS
+// ============================================================
+import CategoriasList from './components/productos/CategoriasList';
+import CategoriaForm from './components/productos/CategoriaForm';
+import MarcasList from './components/productos/MarcasList';
+import MarcaForm from './components/productos/MarcaForm';
+
 // Guardián de rutas (requiere token)
 const RutaProtegida = ({ children }) => {
   const { token } = useContext(AuthContext);
@@ -103,9 +111,24 @@ function App() {
               <Route path="blog" element={<Blog />} />
               <Route path="/admin/blog/nuevo" element={<NuevoArticulo />} />
               <Route path="/admin/blog/editar/:id" element={<NuevoArticulo />} />
+              
+              {/* ============================================ */}
+              {/* GESTIÓN DE PRODUCTOS (submódulos)            */}
+              {/* ============================================ */}
               <Route path="productos" element={<Productos />} />
               <Route path="productos/nuevo" element={<ProductoFormPage />} />
               <Route path="productos/editar/:id" element={<ProductoFormPage />} />
+
+              {/* 👇 CATEGORÍAS */}
+              <Route path="productos/categorias" element={<CategoriasList />} />
+              <Route path="productos/categorias/nueva" element={<CategoriaForm />} />
+              <Route path="productos/categorias/editar/:id" element={<CategoriaForm />} />
+
+              {/* 👇 MARCAS */}
+              <Route path="productos/marcas" element={<MarcasList />} />
+              <Route path="productos/marcas/nueva" element={<MarcaForm />} />
+              <Route path="productos/marcas/editar/:id" element={<MarcaForm />} />
+
               <Route path="gestion-pedidos" element={<GestionPedidos />} />
               <Route path="asignacion" element={<AsignacionAdmin />} />
               <Route path="marketing" element={<MarketingView />} />

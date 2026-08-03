@@ -371,3 +371,54 @@ body, html {
     padding: 20px 16px;
   }
 }
+/* Submenú */
+.cm-nav-item-wrapper {
+  margin-bottom: 2px;
+}
+
+.cm-navlink.has-children {
+  cursor: pointer;
+}
+
+.cm-arrow {
+  margin-left: auto;
+  transition: transform 0.2s;
+  font-size: 12px;
+}
+.cm-arrow.open {
+  transform: rotate(180deg);
+}
+
+.cm-subnav {
+  padding-left: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 0 0 8px 8px;
+  overflow: hidden;
+}
+
+.cm-subnavlink {
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  color: #cbd5e1;
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+.cm-subnavlink:hover {
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+}
+.cm-subnavlink.active {
+  background: rgba(37,99,235,0.2);
+  color: #fff;
+}
+
+/* Ajuste para cuando el sidebar está colapsado */
+.cm-collapsed .cm-subnav {
+  display: none;
+}
+.cm-collapsed .cm-arrow {
+  display: none;
+}

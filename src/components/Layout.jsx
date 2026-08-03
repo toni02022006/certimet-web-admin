@@ -24,6 +24,8 @@ const icons = {
   calendario: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z',
   pedidos: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012-2m-6 9l2 2 4-4',
   marketing: 'M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0-4H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z',
+  seo: 'M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.66 0 3-4.03 3-9s-1.34-9-3-9m0 18c-1.66 0-3-4.03-3-9s1.34-9 3-9',
+  paginas: 'M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z M16 2v6h6 M9 15h6 M9 11h6 M9 19h4',
 };
 
 const NAV_ITEMS = [
@@ -38,6 +40,8 @@ const NAV_ITEMS = [
   { to: '/blog', label: 'Gestión de Blog', icon: icons.blog, roles: ['Superadmin', 'Admin'], modulo: 'Gestión de Blog' },
   { to: '/productos', label: 'Gestión de Productos', icon: icons.productos, roles: ['Superadmin', 'Admin'], modulo: 'Gestión de Productos' },
   { to: '/marketing', label: 'Marketing', icon: icons.marketing, roles: ['Superadmin', 'Admin'], modulo: 'Marketing' },
+  { to: '/seo', label: 'SEO', icon: icons.seo, roles: ['Superadmin', 'Admin'], modulo: 'SEO' },
+  { to: '/paginas', label: 'Páginas', icon: icons.paginas, roles: ['Superadmin', 'Admin'], modulo: 'PAGINAS' },
 ];
 
 const Layout = () => {

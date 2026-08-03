@@ -1,0 +1,143 @@
+/* C:\System local\System\certimet-web-admin\src\views\Seo.css */
+
+.cm-seo-container {
+  padding: 1.5rem;
+  background: #f8f9fa;
+  min-height: 100%;
+}
+
+.cm-seo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.cm-seo-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #1e293b;
+}
+
+.cm-seo-btn-primary {
+  background: #0ea5e9;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.cm-seo-btn-primary:hover {
+  background: #0284c7;
+}
+
+.cm-seo-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.cm-seo-table th,
+.cm-seo-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.cm-seo-table th {
+  background: #f1f5f9;
+  font-weight: 600;
+  color: #475569;
+}
+
+.cm-seo-table tr:hover td {
+  background: #f8fafc;
+}
+
+.cm-seo-btn-edit {
+  background: #f59e0b;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.25rem;
+  margin-right: 0.5rem;
+  cursor: pointer;
+}
+
+.cm-seo-btn-edit:hover {
+  background: #d97706;
+}
+
+.cm-seo-btn-delete {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.cm-seo-btn-delete:hover {
+  background: #dc2626;
+}
+
+.cm-seo-loading {
+  display: flex;
+  justify-content: center;
+  padding: 3rem;
+  font-size: 1.2rem;
+  color: #64748b;
+}
+
+/* =========================================
+   ESTILOS DEL MODAL (CORRECCIÓN Z-INDEX)
+   ========================================= */
+
+.cm-seo-modal-overlay {
+  position: fixed;
+  top: 0; 
+  left: 0; 
+  width: 100vw; 
+  height: 100vh;
+  background: rgba(15, 23, 42, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999; /* 👈 Mantiene el modal sobre el header */
+  backdrop-filter: blur(2px);
+}
+
+.cm-seo-modal {
+  background: white;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  max-width: 800px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  z-index: 10000;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Scrollbar personalizado para el modal */
+.cm-seo-modal::-webkit-scrollbar {
+  width: 8px;
+}
+.cm-seo-modal::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+.cm-seo-modal::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+.cm-seo-modal::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}

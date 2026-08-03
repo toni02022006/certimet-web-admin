@@ -20,6 +20,8 @@ import NotificacionGlobal from './utils/NotificacionGlobal';
 import GestionPedidos from './views/GestionPedidos';
 import NuevoArticulo from './components/Blog/NuevoArticulo';
 import MarketingView from './views/MarketingView';
+import Seo from './views/Seo';
+import Paginas from './views/Paginas';
 
 // Guardián de rutas (requiere token)
 const RutaProtegida = ({ children }) => {
@@ -106,7 +108,9 @@ function App() {
               <Route path="productos/editar/:id" element={<ProductoFormPage />} />
               <Route path="gestion-pedidos" element={<GestionPedidos />} />
               <Route path="asignacion" element={<AsignacionAdmin />} />
-              <Route path="marketing" element={<MarketingView />} />              
+              <Route path="marketing" element={<MarketingView />} />
+              <Route path="/seo" element={<Seo />} />
+              <Route path="/paginas" element={<Paginas />} />           
             </Route>
 
             {/* Rutas solo Superadmin */}

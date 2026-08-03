@@ -1,0 +1,74 @@
+/* C:\System local\System\certimet-web-admin\src\components\seo\SeoForm.css */
+
+.cm-seo-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+.cm-seo-form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.cm-seo-form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.cm-seo-form-group label {
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  font-size: 0.875rem;
+  color: #1e293b;
+}
+
+.cm-seo-form-group input:not([type="checkbox"]),
+.cm-seo-form-group textarea,
+.cm-seo-form-group select {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  background-color: #f8fafc;
+  transition: border-color 0.2s ease;
+}
+
+.cm-seo-form-group input:not([type="checkbox"]):focus,
+.cm-seo-form-group textarea:focus,
+.cm-seo-form-group select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  background-color: #ffffff;
+}
+
+.cm-seo-form-group input[type="checkbox"] {
+  width: auto;
+  margin-right: 0.5rem;
+  cursor: pointer;
+}
+
+.cm-seo-form-actions {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 1.5rem;
+  grid-column: 1 / -1;
+}
+
+.cm-seo-btn-secondary {
+  background: #e2e8f0;
+  color: #475569;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.cm-seo-btn-secondary:hover {
+  background: #cbd5e1;
+}

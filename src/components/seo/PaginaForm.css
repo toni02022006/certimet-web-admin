@@ -1,0 +1,102 @@
+/* C:\System local\System\certimet-web-admin\src\components\seo\PaginaForm.css */
+
+.cm-paginas-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.cm-paginas-form-group {
+  margin-bottom: 1rem;
+  /* ❌ Eliminamos el padding-top: 30% que rompía el diseño */
+}
+
+.cm-paginas-form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  font-size: 0.875rem;
+  color: #1e293b;
+}
+
+.cm-paginas-form-group input:not([type="checkbox"]),
+.cm-paginas-form-group textarea,
+.cm-paginas-form-group select {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  background-color: #f8fafc;
+  transition: border-color 0.2s ease;
+}
+
+.cm-paginas-form-group input:not([type="checkbox"]):focus,
+.cm-paginas-form-group textarea:focus,
+.cm-paginas-form-group select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  background-color: #ffffff;
+}
+
+.cm-paginas-form-group input[type="checkbox"] {
+  width: auto;
+  margin-right: 0.5rem;
+  cursor: pointer;
+}
+
+.cm-paginas-form-group small {
+  display: block;
+  margin-top: 0.25rem;
+  color: #64748b;
+  font-size: 0.75rem;
+}
+
+.cm-paginas-form-group hr {
+  margin: 1.5rem 0;
+  border: 0;
+  border-top: 1px solid #e2e8f0;
+}
+
+.cm-paginas-form-group h4 {
+  margin-bottom: 1rem;
+  color: #0f172a;
+}
+
+.cm-paginas-form-actions {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.cm-paginas-btn-primary {
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.cm-paginas-btn-primary:hover {
+  background: #1d4ed8;
+}
+
+.cm-paginas-btn-secondary {
+  background: #e2e8f0;
+  color: #475569;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.cm-paginas-btn-secondary:hover {
+  background: #cbd5e1;
+}

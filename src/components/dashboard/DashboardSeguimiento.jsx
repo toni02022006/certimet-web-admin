@@ -365,39 +365,43 @@ export default function DashboardSeguimiento() {
 
       {/* ========== GRÁFICOS ========== */}
       
-      {/* Gráfico 1: Ocupa todo el ancho, pero con menos altura */}
+      {/* Gráfico 1: Ocupa todo el ancho, altura controlada */}
       <div className="cm-card mt-4" style={{ width: '100%' }}>
         <div className="cm-card-header">
           <h3 className="cm-card-title">Productividad de usuarios</h3>
         </div>
-        {/* AQUÍ ESTÁ EL CAMBIO: height bajó a '180px' para achicar el alto */}
-        <div className="cm-card-body" style={{ height: '180px', width: '100%', position: 'relative' }}>
-          <Bar 
-            data={barData} 
-            options={{ 
-              responsive: true, 
-              maintainAspectRatio: false, 
-              plugins: { legend: { display: false } } 
-            }} 
-          />
+        <div className="cm-card-body">
+          {/* 🔥 EL TRUCO: Un div interno que bloquea la altura estrictamente a 250px */}
+          <div style={{ height: '250px', width: '100%', position: 'relative' }}>
+            <Bar 
+              data={barData} 
+              options={{ 
+                responsive: true, 
+                maintainAspectRatio: false, 
+                plugins: { legend: { display: false } } 
+              }} 
+            />
+          </div>
         </div>
       </div>
 
-      {/* Gráfico 2: Ocupa todo el ancho, pero con menos altura */}
+      {/* Gráfico 2: Ocupa todo el ancho, altura controlada */}
       <div className="cm-card mt-4" style={{ width: '100%' }}>
         <div className="cm-card-header">
           <h3 className="cm-card-title">Tendencia diaria (últimos 7 días)</h3>
         </div>
-        {/* AQUÍ ESTÁ EL CAMBIO: height bajó a '180px' para achicar el alto */}
-        <div className="cm-card-body" style={{ height: '100px', width: '100%', position: 'relative' }}>
-          <Line 
-            data={lineData} 
-            options={{ 
-              responsive: true, 
-              maintainAspectRatio: false, 
-              plugins: { legend: { display: false } } 
-            }} 
-          />
+        <div className="cm-card-body">
+          {/* 🔥 EL TRUCO: Un div interno que bloquea la altura estrictamente a 250px */}
+          <div style={{ height: '250px', width: '100%', position: 'relative' }}>
+            <Line 
+              data={lineData} 
+              options={{ 
+                responsive: true, 
+                maintainAspectRatio: false, 
+                plugins: { legend: { display: false } } 
+              }} 
+            />
+          </div>
         </div>
       </div>
 

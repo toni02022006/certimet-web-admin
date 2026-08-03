@@ -365,6 +365,17 @@ const Inicio = () => {
   };
 
   // ==============================
+  // HELPER PARA FORMATEAR FECHAS (datetime-local)
+  // ==============================
+  const formatDateTimeLocal = (dateString) => {
+    if (!dateString) return '';
+    const d = new Date(dateString);
+    if (isNaN(d.getTime())) return '';
+    const tzOffset = d.getTimezoneOffset() * 60000;
+    return new Date(d.getTime() - tzOffset).toISOString().slice(0, 16);
+  };
+
+  // ==============================
   // ACCIONES DESDE LA TABLA
   // ==============================
 
@@ -405,33 +416,140 @@ const Inicio = () => {
     }
   };
 
-  // Editar tarea
+  // ==============================
+  // Editar tarea (NUEVA VERSIÓN)
+  // ==============================
   const handleEditar = async (tarea) => {
-    const { value: nuevoTitulo } = await Swal.fire({
-      title: 'Editar título',
-      input: 'text',
-      inputValue: tarea.titulo,
+    const rolUsuario = usuario?.rol?.toLowerCase() || '';
+    const esAdmin = rolUsuario === 'admin' || rolUsuario === 'superadmin';
+
+    // Generamos las opciones dinámicas
+    const empresasOptions = empresas.map(emp => 
+      `<option value="${emp.id}" ${emp.id === tarea.empresa_id ? 'selected' : ''}>${emp.nombre}</option>`
+    ).join('');
+
+    const categoriasOptions = categorias.map(cat => 
+      `<option value="${cat.id}" ${cat.id === tarea.categoria_tarea_id ? 'selected' : ''}>${cat.nombre}</option>`
+    ).join('');
+
+    // HTML base (Campos comunes)
+    let htmlForm = `
+      <div style="display: flex; flex-direction: column; gap: 12px; text-align: left;">
+        <div>
+          <label style="font-size: 13px; font-weight: 600; color: #475569;">Título</label>
+          <input id="swal-titulo" class="swal2-input" value="${tarea.titulo}" style="margin: 4px 0 0 0; width: 100%; height: 40px; font-size: 14px;">
+        </div>
+        
+        <div>
+          <label style="font-size: 13px; font-weight: 600; color: #475569;">Descripción</label>
+          <input id="swal-desc" class="swal2-input" value="${tarea.descripcion || ''}" style="margin: 4px 0 0 0; width: 100%; height: 40px; font-size: 14px;">
+        </div>
+
+        <div>
+          <label style="font-size: 13px; font-weight: 600; color: #475569;">Empresa</label>
+          <select id="swal-empresa" class="swal2-select" style="margin: 4px 0 0 0; width: 100%; font-size: 14px; padding: 0 10px;">
+            ${empresasOptions}
+          </select>
+        </div>
+
+        <div>
+          <label style="font-size: 13px; font-weight: 600; color: #475569;">Categoría</label>
+          <select id="swal-categoria" class="swal2-select" style="margin: 4px 0 0 0; width: 100%; font-size: 14px; padding: 0 10px;">
+            ${categoriasOptions}
+          </select>
+        </div>
+    `;
+
+    // Lógica exclusiva de Administradores
+    if (esAdmin) {
+      const estados = ['PENDIENTE', 'EN_PROCESO', 'PAUSADA', 'FINALIZADA'];
+      const estadosOptions = estados.map(est => 
+        `<option value="${est}" ${est === tarea.estado ? 'selected' : ''}>${est.replace('_', ' ')}</option>`
+      ).join('');
+
+      // Buscar la fecha de fin real analizando intervalos si es necesario
+      let fechaFinStr = tarea.fecha_finalizacion;
+      if (!fechaFinStr && tarea.estado === 'FINALIZADA' && tarea.intervalos?.length) {
+        const intsFin = tarea.intervalos.filter(i => i.fecha_fin);
+        if (intsFin.length > 0) fechaFinStr = intsFin[intsFin.length - 1].fecha_fin;
+      }
+
+      const inicioVal = formatDateTimeLocal(tarea.fecha_creacion);
+      const finVal = formatDateTimeLocal(fechaFinStr);
+
+      htmlForm += `
+        <div style="margin-top: 8px; padding-top: 12px; border-top: 1px dashed #cbd5e0;">
+          <label style="font-size: 13px; font-weight: 600; color: #0284c7;">Estado (Solo Admin)</label>
+          <select id="swal-estado" class="swal2-select" style="margin: 4px 0 0 0; width: 100%; font-size: 14px; padding: 0 10px; border-color: #0284c7;">
+            ${estadosOptions}
+          </select>
+        </div>
+        <div style="display: flex; gap: 10px; margin-top: 8px;">
+          <div style="flex: 1;">
+            <label style="font-size: 13px; font-weight: 600; color: #0284c7;">Inicio (Admin)</label>
+            <input id="swal-inicio" type="datetime-local" class="swal2-input" value="${inicioVal}" style="margin: 4px 0 0 0; width: 100%; height: 35px; font-size: 13px; padding: 0 5px; border-color: #0284c7;">
+          </div>
+          <div style="flex: 1;">
+            <label style="font-size: 13px; font-weight: 600; color: #0284c7;">Fin (Admin)</label>
+            <input id="swal-fin" type="datetime-local" class="swal2-input" value="${finVal}" style="margin: 4px 0 0 0; width: 100%; height: 35px; font-size: 13px; padding: 0 5px; border-color: #0284c7;">
+          </div>
+        </div>
+      `;
+    }
+
+    htmlForm += `</div>`;
+
+    // Lanzamos el modal
+    const { value: formValues } = await Swal.fire({
+      title: 'Editar Tarea',
+      html: htmlForm,
       showCancelButton: true,
-      inputValidator: (value) => {
-        if (!value || !value.trim()) return 'El título no puede estar vacío';
+      confirmButtonText: 'Guardar Cambios',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#1a5276',
+      focusConfirm: false,
+      preConfirm: () => {
+        const titulo = document.getElementById('swal-titulo').value.trim();
+        const descripcion = document.getElementById('swal-desc').value.trim();
+        const empresa_id = document.getElementById('swal-empresa').value;
+        const categoria_id = document.getElementById('swal-categoria').value;
+        
+        let estado = tarea.estado;
+        let fecha_inicio = null;
+        let fecha_fin = null;
+        
+        if (esAdmin) {
+          estado = document.getElementById('swal-estado').value;
+          fecha_inicio = document.getElementById('swal-inicio').value;
+          fecha_fin = document.getElementById('swal-fin').value;
+        }
+
+        if (!titulo) {
+          Swal.showValidationMessage('El título es obligatorio');
+          return false;
+        }
+
+        return { 
+          titulo, 
+          descripcion, 
+          empresa_id: parseInt(empresa_id), 
+          categoria_tarea_id: parseInt(categoria_id), 
+          estado,
+          fecha_inicio: fecha_inicio || undefined,
+          fecha_fin: fecha_fin || undefined
+        };
       }
     });
-    if (nuevoTitulo === undefined) return;
 
-    const { value: nuevaDesc } = await Swal.fire({
-      title: 'Editar descripción',
-      input: 'text',
-      inputValue: tarea.descripcion || '',
-      showCancelButton: true,
-    });
-    if (nuevaDesc === undefined) return;
+    if (!formValues) return; 
 
+    // Petición al Backend
     try {
-      await api.put(`/seguimiento/tarea/${tarea.id}`, {
-        titulo: nuevoTitulo.trim(),
-        descripcion: nuevaDesc.trim()
-      });
+      await api.put(`/seguimiento/tarea/${tarea.id}`, formValues);
       cargarTareas();
+      if (tareaActualId === tarea.id) {
+        cargarEstado(); 
+      }
       Swal.fire('Actualizada', 'Tarea actualizada correctamente', 'success');
     } catch (error) {
       console.error('Error al editar:', error);

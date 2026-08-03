@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 
 // Importa aquí la imagen de fondo y el logo
 import fondoAdmin from '../image/FONDO1.jpeg'; 
-import logoCertimet from '../image/LOGO2026.png';
+import logoCertimet from '../image/LOGO2026.webp';
 
 import './Login.css';
 

@@ -441,3 +441,75 @@
 .btn-limpiar-filtros:hover {
   background: #cbd5e0;
 }
+/* ============================================================
+   ESTILOS PARA EL MODAL DE EDICIÓN DE TAREAS (SweetAlert2)
+   ============================================================ */
+
+/* Campos de texto, selects y datetime-local dentro del modal */
+#swal-titulo,
+#swal-desc,
+#swal-empresa,
+#swal-categoria,
+#swal-estado,
+#swal-inicio,
+#swal-fin {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #cbd5e0;
+  border-radius: 6px;
+  font-size: 14px;
+  background: #f8fafc;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#swal-titulo:focus,
+#swal-desc:focus,
+#swal-empresa:focus,
+#swal-categoria:focus,
+#swal-estado:focus,
+#swal-inicio:focus,
+#swal-fin:focus {
+  outline: none;
+  border-color: #1a5276;
+  box-shadow: 0 0 0 3px rgba(26, 82, 118, 0.12);
+}
+
+/* Estilos específicos para los inputs datetime-local */
+#swal-inicio,
+#swal-fin {
+  padding: 6px 8px;
+  font-size: 13px;
+  height: 35px;
+  background: white;
+}
+
+/* Selects */
+#swal-empresa,
+#swal-categoria,
+#swal-estado {
+  height: 40px;
+  appearance: auto;
+  background: white;
+}
+
+/* Ajuste para los labels dentro del modal (opcional) */
+.swal2-html-container label {
+  font-weight: 600;
+  color: #475569;
+}
+
+/* Contenedor de los campos de fecha (para alineación) */
+.swal2-html-container div[style*="display: flex; gap: 10px;"] {
+  margin-top: 8px;
+}
+
+/* Pequeño ajuste para el borde superior en la sección de admin */
+.swal2-html-container div[style*="border-top: 1px dashed"] {
+  padding-top: 12px;
+  margin-top: 8px;
+}
+
+/* Espaciado entre los campos del modal */
+.swal2-html-container > div {
+  gap: 12px;
+}

@@ -364,21 +364,39 @@ export default function DashboardSeguimiento() {
       </div>
 
       {/* ========== GRÁFICOS ========== */}
-      <div className="cm-charts-grid">
-        <div className="cm-card">
-          {/* 🔥 TEXTO CAMBIADO COMO PEDISTE */}
-          <div className="cm-card-header"><h3 className="cm-card-title">Productividad de usuarios</h3></div>
-          <div className="cm-card-body" style={{ height: '100px' }}>
-            <Bar data={barData} options={{ responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }} />
-          </div>
+      
+      {/* Gráfico 1: Ocupa todo el ancho */}
+      <div className="cm-card mt-4" style={{ width: '100%' }}>
+        <div className="cm-card-header">
+          <h3 className="cm-card-title">Productividad de usuarios</h3>
+        </div>
+        {/* Cambié la altura de 100px a 300px para que no se vea aplastado */}
+        <div className="cm-card-body" style={{ height: '300px', width: '100%', position: 'relative' }}>
+          <Bar 
+            data={barData} 
+            options={{ 
+              responsive: true, 
+              maintainAspectRatio: false, 
+              plugins: { legend: { display: false } } 
+            }} 
+          />
         </div>
       </div>
-      <div className="cm-charts-grid">
-        <div className="cm-card">
-          <div className="cm-card-header"><h3 className="cm-card-title">Tendencia diaria (últimos 7 días)</h3></div>
-          <div className="cm-card-body" style={{ height: '300px' }}>
-            <Line data={lineData} options={{ responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }} />
-          </div>
+
+      {/* Gráfico 2: Ocupa todo el ancho */}
+      <div className="cm-card mt-4" style={{ width: '100%' }}>
+        <div className="cm-card-header">
+          <h3 className="cm-card-title">Tendencia diaria (últimos 7 días)</h3>
+        </div>
+        <div className="cm-card-body" style={{ height: '300px', width: '100%', position: 'relative' }}>
+          <Line 
+            data={lineData} 
+            options={{ 
+              responsive: true, 
+              maintainAspectRatio: false, 
+              plugins: { legend: { display: false } } 
+            }} 
+          />
         </div>
       </div>
 

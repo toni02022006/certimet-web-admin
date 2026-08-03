@@ -389,7 +389,7 @@ export default function DashboardSeguimiento() {
           <h3 className="cm-card-title">Tendencia diaria (últimos 7 días)</h3>
         </div>
         {/* AQUÍ ESTÁ EL CAMBIO: height bajó a '180px' para achicar el alto */}
-        <div className="cm-card-body" style={{ height: '180px', width: '100%', position: 'relative' }}>
+        <div className="cm-card-body" style={{ height: '100px', width: '100%', position: 'relative' }}>
           <Line 
             data={lineData} 
             options={{ 

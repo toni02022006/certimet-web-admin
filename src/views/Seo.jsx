@@ -57,7 +57,7 @@ const Seo = () => {
     setEditingSeo(null);
   };
 
-  if (loading) return <div className="cm-seo-loading">Cargando...</div>;
+  if (loading) return <div className="cm-seo-loading">Cargando registros SEO...</div>;
 
   return (
     <div className="cm-seo-container">
@@ -68,42 +68,51 @@ const Seo = () => {
         </button>
       </div>
 
-      <table className="cm-seo-table">
-        <thead>
-          <tr>
-            <th>Ruta</th>
-            <th>Meta Título</th>
-            <th>Meta Descripción</th>
-            <th>Indexar</th>
-            <th>Seguir</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {seos.length === 0 ? (
-            <tr><td colSpan="6">No hay registros SEO</td></tr>
-          ) : (
-            seos.map((seo) => (
-              <tr key={seo.id}>
-                <td>{seo.ruta_url}</td>
-                <td>{seo.meta_titulo || '-'}</td>
-                <td>{seo.meta_descripcion || '-'}</td>
-                <td>{seo.indexar ? '✅' : '❌'}</td>
-                <td>{seo.seguir_enlaces ? '✅' : '❌'}</td>
-                <td>
-                  <button onClick={() => handleEdit(seo)} className="cm-seo-btn-edit">Editar</button>
-                  <button onClick={() => handleDelete(seo.id)} className="cm-seo-btn-delete">Eliminar</button>
-                </td>
+      <div className="cm-seo-table-responsive">
+        <table className="cm-seo-table">
+          <thead>
+            <tr>
+              <th>Ruta</th>
+              <th>Meta Título</th>
+              <th>Meta Descripción</th>
+              <th>Indexar</th>
+              <th>Seguir</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {seos.length === 0 ? (
+              <tr>
+                <td colSpan="6" className="cm-seo-no-results">No hay registros SEO encontrados...</td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            ) : (
+              seos.map((seo) => (
+                <tr key={seo.id}>
+                  <td><code>{seo.ruta_url}</code></td>
+                  <td>{seo.meta_titulo || '-'}</td>
+                  <td>{seo.meta_descripcion || '-'}</td>
+                  <td><span className={seo.indexar ? 'badge-success' : 'badge-danger'}>{seo.indexar ? 'Sí' : 'No'}</span></td>
+                  <td><span className={seo.seguir_enlaces ? 'badge-success' : 'badge-danger'}>{seo.seguir_enlaces ? 'Sí' : 'No'}</span></td>
+                  <td>
+                    <div className="cm-seo-actions-group">
+                      <button onClick={() => handleEdit(seo)} className="cm-seo-btn-edit">Editar</button>
+                      <button onClick={() => handleDelete(seo.id)} className="cm-seo-btn-delete">Eliminar</button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
 
       {showModal && (
         <div className="cm-seo-modal-overlay" onClick={handleModalClose}>
-          <div className="cm-seo-modal" onClick={(e) => e.stopPropagation()}>
-            <h3>{editingSeo ? 'Editar SEO' : 'Nuevo SEO'}</h3>
+          <div className="cm-seo-modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="cm-seo-modal-header">
+              <h3>{editingSeo ? '✏️ Editar Registro SEO' : '✨ Nuevo Registro SEO'}</h3>
+              <button type="button" className="cm-seo-btn-close" onClick={handleModalClose}>&times;</button>
+            </div>
             <SeoForm 
               initialData={editingSeo} 
               onSave={handleSave} 

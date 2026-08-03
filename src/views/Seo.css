@@ -1,143 +1,220 @@
-/* C:\System local\System\certimet-web-admin\src\views\Seo.css */
+/* ==========================================================
+   ESTILOS PREMIUM - MÓDULO SEO
+   ========================================================== */
 
 .cm-seo-container {
-  padding: 1.5rem;
-  background: #f8f9fa;
-  min-height: 100%;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+}
+
+.cm-seo-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  font-size: 16px;
+  color: #64748b;
+  font-weight: 600;
 }
 
 .cm-seo-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 24px;
 }
 
 .cm-seo-header h2 {
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 24px;
+  font-weight: 600;
   color: #1e293b;
 }
 
 .cm-seo-btn-primary {
-  background: #0ea5e9;
+  padding: 10px 20px;
+  background-color: #10b981;
   color: white;
   border: none;
-  padding: 0.6rem 1.2rem;
-  border-radius: 0.375rem;
-  font-weight: 500;
+  border-radius: 8px;
   cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
   transition: background-color 0.2s;
 }
 
 .cm-seo-btn-primary:hover {
-  background: #0284c7;
+  background-color: #059669;
+}
+
+/* Tabla moderna */
+.cm-seo-table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  background: white;
+  border: 1px solid #e2e8f0;
 }
 
 .cm-seo-table {
   width: 100%;
   border-collapse: collapse;
-  background: white;
-  border-radius: 0.5rem;
-  overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
-
-.cm-seo-table th,
-.cm-seo-table td {
-  padding: 1rem;
   text-align: left;
-  border-bottom: 1px solid #e5e7eb;
+  font-size: 14px;
 }
 
 .cm-seo-table th {
-  background: #f1f5f9;
+  background-color: #f8fafc;
+  padding: 14px 16px;
   font-weight: 600;
   color: #475569;
+  border-bottom: 2px solid #e2e8f0;
 }
 
-.cm-seo-table tr:hover td {
-  background: #f8fafc;
+.cm-seo-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #f1f5f9;
+  color: #334155;
+}
+
+.cm-seo-table tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+.cm-seo-no-results {
+  text-align: center;
+  color: #64748b;
+  padding: 30px !important;
+}
+
+.cm-seo-table code {
+  background-color: #f1f5f9;
+  padding: 3px 6px;
+  border-radius: 4px;
+  font-size: 13px;
+  color: #0f172a;
+}
+
+/* Insignias de Estado */
+.badge-success {
+  background-color: #d1fae5;
+  color: #065f46;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.badge-danger {
+  background-color: #fee2e2;
+  color: #991b1b;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Acciones en tabla */
+.cm-seo-actions-group {
+  display: flex;
+  gap: 12px;
 }
 
 .cm-seo-btn-edit {
-  background: #f59e0b;
-  color: white;
+  color: #3b82f6;
+  background: none;
   border: none;
-  padding: 0.4rem 0.8rem;
-  border-radius: 0.25rem;
-  margin-right: 0.5rem;
   cursor: pointer;
+  font-weight: 600;
+  padding: 0;
 }
 
 .cm-seo-btn-edit:hover {
-  background: #d97706;
+  text-decoration: underline;
 }
 
 .cm-seo-btn-delete {
-  background: #ef4444;
-  color: white;
+  color: #ef4444;
+  background: none;
   border: none;
-  padding: 0.4rem 0.8rem;
-  border-radius: 0.25rem;
   cursor: pointer;
+  font-weight: 600;
+  padding: 0;
 }
 
 .cm-seo-btn-delete:hover {
-  background: #dc2626;
+  text-decoration: underline;
 }
 
-.cm-seo-loading {
-  display: flex;
-  justify-content: center;
-  padding: 3rem;
-  font-size: 1.2rem;
-  color: #64748b;
-}
-
-/* =========================================
-   ESTILOS DEL MODAL (CORRECCIÓN Z-INDEX)
-   ========================================= */
-
+/* Modal Estilizado */
 .cm-seo-modal-overlay {
   position: fixed;
-  top: 0; 
-  left: 0; 
-  width: 100vw; 
+  inset: 0;
+  width: 100vw;
   height: 100vh;
-  background: rgba(15, 23, 42, 0.6);
+  background-color: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(3px);
   display: flex;
-  align-items: center;
   justify-content: center;
-  z-index: 9999; /* 👈 Mantiene el modal sobre el header */
-  backdrop-filter: blur(2px);
+  align-items: center;
+  z-index: 99999;
+  padding: 20px;
+  overflow-y: auto;
 }
 
-.cm-seo-modal {
-  background: white;
-  padding: 2rem;
-  border-radius: 0.5rem;
-  max-width: 800px;
-  width: 90%;
+.cm-seo-modal-content {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 14px;
+  width: 100%;
+  max-width: 650px;
   max-height: 90vh;
   overflow-y: auto;
-  position: relative;
-  z-index: 10000;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  animation: modalScaleUp 0.25s ease-out forwards;
+  box-sizing: border-box;
 }
 
-/* Scrollbar personalizado para el modal */
-.cm-seo-modal::-webkit-scrollbar {
-  width: 8px;
+@keyframes modalScaleUp {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-15px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
-.cm-seo-modal::-webkit-scrollbar-track {
-  background: #f1f5f9;
-  border-radius: 4px;
+
+.cm-seo-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 15px;
+  margin-bottom: 20px;
 }
-.cm-seo-modal::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 4px;
+
+.cm-seo-modal-header h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e293b;
 }
-.cm-seo-modal::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+
+.cm-seo-btn-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #64748b;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  transition: color 0.2s;
+}
+
+.cm-seo-btn-close:hover {
+  color: #0f172a;
 }

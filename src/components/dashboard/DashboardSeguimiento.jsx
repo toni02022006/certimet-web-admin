@@ -365,12 +365,11 @@ export default function DashboardSeguimiento() {
 
       {/* ========== GRÁFICOS ========== */}
       
-      {/* Gráfico 1: Ocupa todo el ancho */}
-      <div className="cm-card mt-4" style={{ width: '100%' }}>
+      {/* Gráfico 1: Controlando el ancho */}
+      <div className="cm-card mt-4" style={{ width: '100%', maxWidth: '1100px', margin: '0 auto' }}>
         <div className="cm-card-header">
           <h3 className="cm-card-title">Productividad de usuarios</h3>
         </div>
-        {/* Cambié la altura de 100px a 300px para que no se vea aplastado */}
         <div className="cm-card-body" style={{ height: '300px', width: '100%', position: 'relative' }}>
           <Bar 
             data={barData} 
@@ -383,8 +382,8 @@ export default function DashboardSeguimiento() {
         </div>
       </div>
 
-      {/* Gráfico 2: Ocupa todo el ancho */}
-      <div className="cm-card mt-4" style={{ width: '100%' }}>
+      {/* Gráfico 2: Controlando el ancho */}
+      <div className="cm-card mt-4" style={{ width: '100%', maxWidth: '1100px', margin: '0 auto' }}>
         <div className="cm-card-header">
           <h3 className="cm-card-title">Tendencia diaria (últimos 7 días)</h3>
         </div>

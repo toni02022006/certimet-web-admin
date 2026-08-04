@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 import './GestionPedidos.css';
 
 const ESTADOS_VALIDOS = [
@@ -45,17 +46,62 @@ const GestionPedidos = () => {
 
   const cambiarEstadoPedido = async (idPedido, nuevoEstado) => {
     try {
-      await axios.put(`${API_URL}/api/pedidos/admin/${idPedido}/estado`, 
+      const { data } = await axios.put(`${API_URL}/api/pedidos/admin/${idPedido}/estado`, 
         { estado_pedido: nuevoEstado },
         { headers: { Authorization: `Bearer ${token}` } }
       );
+      
+      // Actualizar lista
       setPedidos(pedidos.map(p => p.id === idPedido ? { ...p, estado_pedido: nuevoEstado } : p));
       if (pedidoSeleccionado && pedidoSeleccionado.id === idPedido) {
         setPedidoSeleccionado({ ...pedidoSeleccionado, estado_pedido: nuevoEstado });
       }
+
+      // Mostrar mensaje de éxito
+      Swal.fire({
+        icon: 'success',
+        title: 'Estado actualizado',
+        text: `El pedido #${idPedido} ahora está ${nuevoEstado.replace('_', ' ')}`,
+        timer: 2000,
+        showConfirmButton: false
+      });
+
     } catch (err) {
       console.error('Error al actualizar estado:', err);
-      alert('Hubo un error al actualizar el estado del pedido.');
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: err.response?.data?.error || 'Hubo un error al actualizar el estado del pedido.'
+      });
+    }
+  };
+
+  // Función específica para cancelar con confirmación
+  const handleCancelarPedido = async (pedido) => {
+    if (pedido.estado_pedido === 'CANCELADO' || pedido.estado_pedido === 'ENTREGADO') {
+      Swal.fire('No disponible', 'Este pedido ya no se puede cancelar', 'info');
+      return;
+    }
+
+    const result = await Swal.fire({
+      title: `¿Cancelar pedido #${pedido.id}?`,
+      html: `
+        <p><strong>Cliente:</strong> ${pedido.cliente_nombres} ${pedido.cliente_apellidos}</p>
+        <p><strong>Total:</strong> S/ ${Number(pedido.total).toFixed(2)}</p>
+        <p style="color: #dc2626; margin-top: 1rem;">
+          ${pedido.estado_pedido === 'PAGADO' ? '⚠️ El pedido ya está pagado. Se devolverá el stock automáticamente, pero deberás gestionar el reembolso en MercadoPago.' : 'El pedido está pendiente, solo se cambiará el estado.'}
+        </p>
+      `,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sí, cancelar',
+      cancelButtonText: 'Cancelar acción'
+    });
+
+    if (result.isConfirmed) {
+      await cambiarEstadoPedido(pedido.id, 'CANCELADO');
     }
   };
 
@@ -117,7 +163,6 @@ const GestionPedidos = () => {
     return rango;
   };
 
-  // Función para mostrar productos con tooltip
   const renderProductos = (pedido) => {
     const detalles = pedido.detalles || [];
     if (!detalles || detalles.length === 0) {

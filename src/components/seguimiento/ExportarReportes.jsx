@@ -372,7 +372,7 @@ const ExportarReportes = ({ tareas, usuario }) => {
           </button>
 
           {/* OPCIONES LOCALES ORIGINALES */}
-          <div style={headerStyle}>Exportar PDF Local</div>
+          <div style={headerStyle}>Exportar Local</div>
           <button style={btnStyle} onClick={() => exportarPDF('hoy')}>Tareas de Hoy</button>
           <button style={btnStyle} onClick={() => exportarPDF('semana')}>Tareas de la Semana</button>
           

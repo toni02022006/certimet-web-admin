@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import Swal from 'sweetalert2';
+import api from '../../services/api';
 
 // Rutas de tus imágenes
 import logoMsf from '../../image/diseñoreporte/msflogo2.2.png';
@@ -16,14 +18,15 @@ const IconDownload = () => (
 
 const ExportarReportes = ({ tareas, usuario }) => {
   const [menuAbierto, setMenuAbierto] = useState(false);
+  const [cargandoDrive, setCargandoDrive] = useState(false);
 
   // Extraemos los datos del usuario dinámicamente
-  const nombreFirma = usuario?.nombre || 'Juan Anthoni Otiniano Imboma';
+  const nombreFirma = `${usuario?.nombre || ''} ${usuario?.apellidos || ''}`.trim() || 'Juan Anthoni Otiniano Imboma';
   
   // Soporte para diferentes formas en las que pueda venir el rol desde tu backend
   const cargoDetectado = usuario?.rol || usuario?.role || usuario?.cargo || 'Software Engineer'; 
   
-  // VALIDACIÓN SUPERADMIN: Si es superadmin, cambia el texto; de lo contrario, deja el original
+  // VALIDACIÓN SUPERADMIN
   const cargoFirma = cargoDetectado.toLowerCase() === 'superadmin' 
     ? 'Desarrollador de Software Full Stack' 
     : cargoDetectado;
@@ -73,6 +76,20 @@ const ExportarReportes = ({ tareas, usuario }) => {
   };
 
   // ==============================
+  // GENERADOR DE NOMBRE DE ARCHIVO
+  // Ej: REPORTE DE ACTIVIDADES - Lunes 3 de agosto del 2026 - Juan Otiniano.png
+  // ==============================
+  const generarNombreEstructurado = (extension) => {
+    const fecha = new Date();
+    const opciones = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+    let fechaTexto = fecha.toLocaleDateString('es-PE', opciones);
+    // Capitalizar la primera letra (ej: Lunes 3 de agosto...)
+    fechaTexto = fechaTexto.charAt(0).toUpperCase() + fechaTexto.slice(1);
+
+    return `REPORTE DE ACTIVIDADES - ${fechaTexto} - ${nombreFirma}.${extension}`;
+  };
+
+  // ==============================
   // MOTOR DE CAPTURA DEL DISEÑO (Imagen y PDF)
   // ==============================
   const capturarDiseno = async (periodo) => {
@@ -94,7 +111,7 @@ const ExportarReportes = ({ tareas, usuario }) => {
     const canvas = await capturarDiseno(periodo);
     const link = document.createElement('a');
     link.href = canvas.toDataURL('image/png');
-    link.download = `Reporte_Tareas_${periodo}.png`;
+    link.download = generarNombreEstructurado('png');
     link.click();
     setMenuAbierto(false);
   };
@@ -109,8 +126,66 @@ const ExportarReportes = ({ tareas, usuario }) => {
     const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
     
     pdf.addImage(imgData, 'PNG', 0, 10, pdfWidth, pdfHeight);
-    pdf.save(`Reporte_Tareas_${periodo}.pdf`);
+    pdf.save(generarNombreEstructurado('pdf'));
     setMenuAbierto(false);
+  };
+
+  // ==============================
+  // ENVIAR A GOOGLE DRIVE (NUEVO)
+  // ==============================
+  const subirADrive = async (periodo, tipoFormato) => {
+    setMenuAbierto(false);
+    setCargandoDrive(true);
+
+    Swal.fire({
+      title: 'Subiendo a Google Drive...',
+      text: 'Generando archivo y organizando tus carpetas.',
+      allowOutsideClick: false,
+      didOpen: () => Swal.showLoading()
+    });
+
+    try {
+      const canvas = await capturarDiseno(periodo);
+      let blobFinal = null;
+      let nombreArchivo = '';
+
+      if (tipoFormato === 'png') {
+        nombreArchivo = generarNombreEstructurado('png');
+        blobFinal = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+      } else if (tipoFormato === 'pdf') {
+        nombreArchivo = generarNombreEstructurado('pdf');
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF({ orientation: 'landscape', format: 'a4' });
+        const imgProps = pdf.getImageProperties(imgData);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        pdf.addImage(imgData, 'PNG', 0, 10, pdfWidth, pdfHeight);
+        blobFinal = pdf.output('blob');
+      }
+
+      if (!blobFinal) throw new Error('No se pudo procesar el archivo');
+
+      const formData = new FormData();
+      formData.append('archivo', blobFinal, nombreArchivo);
+      formData.append('nombreUsuario', nombreFirma);
+
+      await api.post('/seguimiento/exportar-drive', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+
+      Swal.fire({
+        title: '¡Subido con éxito!',
+        text: `El reporte se guardó correctamente en Google Drive en la carpeta del usuario.`,
+        icon: 'success',
+        confirmButtonColor: '#0F9D58'
+      });
+
+    } catch (error) {
+      console.error('Error enviando a Drive:', error);
+      Swal.fire('Error', 'No se pudo subir el archivo a Google Drive', 'error');
+    } finally {
+      setCargandoDrive(false);
+    }
   };
 
   // ==============================
@@ -194,7 +269,7 @@ const ExportarReportes = ({ tareas, usuario }) => {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `Reporte_Tareas_${periodo}.${extension}`;
+    link.download = generarNombreEstructurado(extension);
     link.click();
     URL.revokeObjectURL(url);
     setMenuAbierto(false);
@@ -271,12 +346,13 @@ const ExportarReportes = ({ tareas, usuario }) => {
       {/* Botón Principal */}
       <button 
         onClick={() => setMenuAbierto(!menuAbierto)}
+        disabled={cargandoDrive}
         style={{
           display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', 
           background: '#e2e8f0', color: '#333', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold'
         }}
       >
-        <IconDownload /> Exportar Reporte
+        <IconDownload /> {cargandoDrive ? 'Subiendo...' : 'Exportar Reporte'}
       </button>
 
       {/* Menú Desplegable */}
@@ -284,30 +360,37 @@ const ExportarReportes = ({ tareas, usuario }) => {
         <div style={{
           position: 'absolute', right: 0, top: '40px', background: 'white',
           border: '1px solid #cbd5e0', borderRadius: '4px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-          zIndex: 1000, width: '220px', overflow: 'hidden'
+          zIndex: 1000, width: '240px', overflow: 'hidden'
         }}>
-          <div style={headerStyle}>📄 Exportar PDF</div>
+          {/* SECCIÓN NUEVA: GOOGLE DRIVE */}
+          <div style={headerDriveStyle}>☁️ Enviar a Google Drive</div>
+          <button style={btnDriveStyle} onClick={() => subirADrive('hoy', 'png')}>
+            Subir Imagen (Hoy)
+          </button>
+          <button style={btnDriveStyle} onClick={() => subirADrive('hoy', 'pdf')}>
+            Subir PDF (Hoy)
+          </button>
+
+          {/* OPCIONES LOCALES ORIGINALES */}
+          <div style={headerStyle}>Exportar PDF Local</div>
           <button style={btnStyle} onClick={() => exportarPDF('hoy')}>Tareas de Hoy</button>
           <button style={btnStyle} onClick={() => exportarPDF('semana')}>Tareas de la Semana</button>
           
-          <div style={headerStyle}>🖼️ Exportar Imagen</div>
+          <div style={headerStyle}>Exportar Imagen Local</div>
           <button style={btnStyle} onClick={() => exportarImagen('hoy')}>Tareas de Hoy</button>
           <button style={btnStyle} onClick={() => exportarImagen('semana')}>Tareas de la Semana</button>
-
-          <div style={headerStyle}>📝 Exportar Word</div>
-          <button style={btnStyle} onClick={() => exportarDocumento('hoy', 'word')}>Tareas de Hoy</button>
-          <button style={btnStyle} onClick={() => exportarDocumento('semana', 'word')}>Tareas de la Semana</button>
-
-          <div style={headerStyle}>📊 Exportar Excel</div>
-          <button style={btnStyle} onClick={() => exportarDocumento('hoy', 'excel')}>Tareas de Hoy</button>
-          <button style={btnStyle} onClick={() => exportarDocumento('semana', 'excel')}>Tareas de la Semana</button>
         </div>
       )}
     </div>
   );
 };
 
+// Estilos de la interfaz
 const headerStyle = { padding: '8px', background: '#f8fafc', borderBottom: '1px solid #e2e8f0', fontSize: '12px', fontWeight: 'bold' };
 const btnStyle = { display: 'block', width: '100%', padding: '8px 12px', textAlign: 'left', background: 'none', border: 'none', cursor: 'pointer', fontSize: '13px', borderBottom: '1px solid #f1f5f9' };
+
+// Estilos destacados para la opción de Drive
+const headerDriveStyle = { padding: '8px', background: '#e6f4ea', color: '#137333', borderBottom: '1px solid #ceead6', fontSize: '12px', fontWeight: 'bold' };
+const btnDriveStyle = { display: 'block', width: '100%', padding: '8px 12px', textAlign: 'left', background: '#f6fbf7', color: '#137333', border: 'none', cursor: 'pointer', fontSize: '13px', fontWeight: '600', borderBottom: '1px solid #e6f4ea' };
 
 export default ExportarReportes;

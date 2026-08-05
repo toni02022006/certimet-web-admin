@@ -12,7 +12,7 @@ const ProductoFormPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // Estados para el formulario
+  // Estados para el formulario (se mantiene nueva_subcategoria para poder escribir)
   const [formData, setFormData] = useState({
     categoria_id: '',
     nombre: '',
@@ -34,7 +34,7 @@ const ProductoFormPage = () => {
     condicion: 'NUEVO',
     incluye_igv: true,
     ficha_tecnica_url: '',
-    nueva_subcategoria: '',
+    nueva_subcategoria: '', 
     slug: '',
   });
 
@@ -48,8 +48,12 @@ const ProductoFormPage = () => {
   const [categorias, setCategorias] = useState([]);
   const [marcas, setMarcas] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [categoriaPadreId, setCategoriaPadreId] = useState('');
+  
+  // Nuevos estados para los 3 niveles de selección
+  const [nivel1Id, setNivel1Id] = useState('');
+  const [nivel2Id, setNivel2Id] = useState('');
   const [subcategoriasFiltradas, setSubcategoriasFiltradas] = useState([]);
+  const [subSubcategoriasFiltradas, setSubSubcategoriasFiltradas] = useState([]);
 
   // ============================================================
   // CARGAR DATOS INICIALES
@@ -103,18 +107,37 @@ const ProductoFormPage = () => {
             incluye_igv: prod.incluye_igv ?? true,
             ficha_tecnica_url: prod.ficha_tecnica_url || '',
             slug: prod.slug || '',
+            nueva_subcategoria: ''
           });
+
           if (prod.imagen_principal_url) {
             setImagenPreview(`${import.meta.env.VITE_API_URL}${prod.imagen_principal_url}`);
           }
           if (prod.imagenes && prod.imagenes.length > 0) {
             setGaleriaExistente(prod.imagenes);
           }
-          const catSeleccionada = categorias.find(c => c.id === prod.categoria_id);
-          if (catSeleccionada && catSeleccionada.parent_id) {
-            setCategoriaPadreId(catSeleccionada.parent_id.toString());
-          } else if (catSeleccionada) {
-            setCategoriaPadreId(catSeleccionada.id.toString());
+
+          // Lógica para reconstruir los 3 niveles de categoría al editar
+          if (prod.categoria_id) {
+            const catFinal = categorias.find(c => c.id === prod.categoria_id);
+            if (catFinal) {
+              if (catFinal.parent_id) {
+                const catPadre = categorias.find(c => c.id === catFinal.parent_id);
+                if (catPadre && catPadre.parent_id) {
+                  // catFinal es Nivel 3 (Sub-subcategoría)
+                  setNivel1Id(catPadre.parent_id.toString());
+                  setNivel2Id(catPadre.id.toString());
+                } else {
+                  // catFinal es Nivel 2 (Subcategoría)
+                  setNivel1Id(catFinal.parent_id.toString());
+                  setNivel2Id(catFinal.id.toString());
+                }
+              } else {
+                // catFinal es Nivel 1 (Categoría Principal)
+                setNivel1Id(catFinal.id.toString());
+                setNivel2Id('');
+              }
+            }
           }
         } else {
           Swal.fire('Error', 'No se pudo cargar el producto', 'error');
@@ -126,33 +149,57 @@ const ProductoFormPage = () => {
     fetchProducto();
   }, [id, categorias]);
 
+  // Filtrar Nivel 2
   useEffect(() => {
-    if (categoriaPadreId) {
-      const subcategorias = categorias.filter(c => c.parent_id === parseInt(categoriaPadreId));
-      setSubcategoriasFiltradas(subcategorias);
+    if (nivel1Id) {
+      setSubcategoriasFiltradas(categorias.filter(c => c.parent_id === parseInt(nivel1Id)));
     } else {
       setSubcategoriasFiltradas([]);
     }
-  }, [categoriaPadreId, categorias]);
+  }, [nivel1Id, categorias]);
+
+  // Filtrar Nivel 3
+  useEffect(() => {
+    if (nivel2Id) {
+      setSubSubcategoriasFiltradas(categorias.filter(c => c.parent_id === parseInt(nivel2Id)));
+    } else {
+      setSubSubcategoriasFiltradas([]);
+    }
+  }, [nivel2Id, categorias]);
 
   // ============================================================
-  // MANEJADORES
+  // MANEJADORES DE NIVELES (CASCADA Y SELECCIÓN)
   // ============================================================
+  const handleNivel1Change = (e) => {
+    const val = e.target.value;
+    setNivel1Id(val);
+    setNivel2Id('');
+    // Al seleccionar, se limpia lo que haya escrito a mano
+    setFormData((prev) => ({ ...prev, categoria_id: val, nueva_subcategoria: '' }));
+  };
+
+  const handleNivel2Change = (e) => {
+    const val = e.target.value;
+    setNivel2Id(val);
+    setFormData((prev) => ({ ...prev, categoria_id: val || nivel1Id, nueva_subcategoria: '' }));
+  };
+
+  const handleNivel3Change = (e) => {
+    const val = e.target.value;
+    setFormData((prev) => ({ ...prev, categoria_id: val || nivel2Id, nueva_subcategoria: '' }));
+  };
+
+  // Resto de manejadores
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     const val = type === 'checkbox' ? checked : value;
-    setFormData((prev) => ({ ...prev, [name]: val }));
-  };
-
-  const handleCategoriaPadreChange = (e) => {
-    const padreId = e.target.value;
-    setCategoriaPadreId(padreId);
-    setFormData((prev) => ({ ...prev, categoria_id: '' }));
-  };
-
-  const handleSubcategoriaChange = (e) => {
-    const subcatId = e.target.value;
-    setFormData((prev) => ({ ...prev, categoria_id: subcatId }));
+    
+    // Si escribe en "nueva_subcategoria", se deselecciona el Nivel 3 de la lista (si lo había)
+    if (name === 'nueva_subcategoria' && value.trim() !== '') {
+      setFormData((prev) => ({ ...prev, nueva_subcategoria: value, categoria_id: nivel2Id || nivel1Id }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: val }));
+    }
   };
 
   const handleQuillChange = (field, value) => {
@@ -193,7 +240,7 @@ const ProductoFormPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.categoria_id && !formData.nueva_subcategoria?.trim()) {
-      Swal.fire('Atención', 'Selecciona una categoría o escribe una nueva subcategoría.', 'warning');
+      Swal.fire('Atención', 'Selecciona una categoría o escribe una nueva.', 'warning');
       return;
     }
     setLoading(true);
@@ -205,7 +252,12 @@ const ProductoFormPage = () => {
         datosEnvio.append(key, formData[key] !== undefined ? formData[key] : '');
       }
     });
-    datosEnvio.append('categoriaPadreId', categoriaPadreId);
+
+    // Calcular el parentId correcto en caso de que escriban una "nueva_subcategoria" a mano.
+    // Si hay un Nivel 2 seleccionado, la nueva se crea dentro de Nivel 2. Si solo hay Nivel 1, dentro del Nivel 1.
+    const padreParaNueva = nivel2Id || nivel1Id; 
+    datosEnvio.append('categoriaPadreId', padreParaNueva);
+
     if (archivoImagen) datosEnvio.append('imagen_archivo', archivoImagen);
     if (archivosGaleria.length > 0) {
       archivosGaleria.forEach((file) => datosEnvio.append('galeria', file));
@@ -239,9 +291,6 @@ const ProductoFormPage = () => {
     }
   };
 
-  // ============================================================
-  // RENDER
-  // ============================================================
   return (
     <div className="pfp-container">
       <div className="pfp-header">
@@ -261,14 +310,18 @@ const ProductoFormPage = () => {
               setFormData={setFormData}
               categorias={categorias}
               marcas={marcas}
-              categoriaPadreId={categoriaPadreId}
-              handleCategoriaPadreChange={handleCategoriaPadreChange}
+              
+              // Enviamos la lógica y los 3 niveles hacia abajo
+              nivel1Id={nivel1Id}
+              handleNivel1Change={handleNivel1Change}
+              nivel2Id={nivel2Id}
+              handleNivel2Change={handleNivel2Change}
+              handleNivel3Change={handleNivel3Change}
               subcategoriasFiltradas={subcategoriasFiltradas}
-              handleSubcategoriaChange={handleSubcategoriaChange}
+              subSubcategoriasFiltradas={subSubcategoriasFiltradas}
             />
           </div>
 
-          {/* Sección 2: Galería */}
           <div className="pfp-card">
             <FormGaleria
               imagenPreview={imagenPreview}
@@ -281,7 +334,6 @@ const ProductoFormPage = () => {
             />
           </div>
 
-          {/* Sección 3: Descripciones */}
           <div className="pfp-card">
             <FormDescripciones
               formData={formData}
@@ -290,7 +342,6 @@ const ProductoFormPage = () => {
           </div>
         </div>
 
-        {/* Vista previa */}
         <div className="pfp-preview-section">
           <h2 className="pfp-preview-title">📱 Vista Previa en Tienda</h2>
           <div className="pfp-preview-wrapper">
@@ -305,20 +356,11 @@ const ProductoFormPage = () => {
           </div>
         </div>
 
-        {/* Acciones */}
         <div className="pfp-actions">
-          <button
-            type="button"
-            className="pfp-btn pfp-btn-cancel"
-            onClick={() => navigate('/productos')}
-          >
+          <button type="button" className="pfp-btn pfp-btn-cancel" onClick={() => navigate('/productos')}>
             Cancelar
           </button>
-          <button
-            type="submit"
-            className="pfp-btn pfp-btn-submit"
-            disabled={loading}
-          >
+          <button type="submit" className="pfp-btn pfp-btn-submit" disabled={loading}>
             {loading ? 'Guardando...' : id ? 'Actualizar Producto' : 'Guardar Producto'}
           </button>
         </div>

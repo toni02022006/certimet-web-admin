@@ -1,3 +1,4 @@
+// CategoriasList.jsx
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
@@ -27,7 +28,7 @@ const CategoriasList = () => {
   const handleDelete = async (id, nombre) => {
     const confirm = await Swal.fire({
       title: '¿Eliminar categoría?',
-      text: `Estás seguro de eliminar "${nombre}"?`,
+      text: `¿Estás seguro de eliminar "${nombre}"?`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#d33',
@@ -41,27 +42,46 @@ const CategoriasList = () => {
       const res = await fetch(import.meta.env.VITE_API_URL + `/api/categorias/${id}`, {
         method: 'DELETE'
       });
-      if (!res.ok) throw new Error('Error al eliminar');
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || 'Error al eliminar');
+      }
       Swal.fire('Eliminada', 'Categoría eliminada correctamente', 'success');
       fetchCategorias();
     } catch (error) {
-      Swal.fire('Error', 'No se pudo eliminar la categoría', 'error');
+      Swal.fire('Error', error.message || 'No se pudo eliminar la categoría', 'error');
     }
   };
 
-  // Función para mostrar la jerarquía con guiones
-  const renderNombreConPadre = (cat, nivel = 0) => {
-    const prefijo = '— '.repeat(nivel);
-    return `${prefijo}${cat.nombre}`;
+  // Construir mapa de categorías por id para acceso rápido
+  const categoriaMap = {};
+  categorias.forEach(cat => {
+    categoriaMap[cat.id] = cat;
+  });
+
+  // Función corregida: obtiene los ancestros de arriba hacia abajo
+  const getAncestros = (categoria) => {
+    const chain = [];
+    let actual = categoria;
+
+    // Subimos por el árbol jerárquico hasta llegar a la raíz (parent_id = null)
+    while (actual) {
+      // unshift agrega el elemento al inicio del array. 
+      // Así, la categoría más "padre" siempre quedará en la posición 0.
+      chain.unshift(actual.nombre);
+      actual = actual.parent_id ? categoriaMap[actual.parent_id] : null;
+    }
+
+    // Retornamos un arreglo fijo de 3 posiciones para las 3 columnas
+    return [
+      chain[0] || null, // Nivel 1 (Padre)
+      chain[1] || null, // Nivel 2 (Hijo)
+      chain[2] || null  // Nivel 3 (Nieto)
+    ];
   };
 
-  // Ordenar categorías por parent_id (simple)
-  const categoriasOrdenadas = [...categorias].sort((a, b) => {
-    if (a.parent_id === null && b.parent_id !== null) return -1;
-    if (a.parent_id !== null && b.parent_id === null) return 1;
-    if (a.parent_id === b.parent_id) return a.nombre.localeCompare(b.nombre);
-    return a.parent_id - b.parent_id;
-  });
+  // Ordenar por nombre para mejor lectura
+  const categoriasOrdenadas = [...categorias].sort((a, b) => a.nombre.localeCompare(b.nombre));
 
   if (loading) return <div className="cl-loading">Cargando categorías...</div>;
 
@@ -79,22 +99,22 @@ const CategoriasList = () => {
           <thead>
             <tr>
               <th>ID</th>
-              <th>Nombre</th>
-              <th>Slug</th>
-              <th>Padre</th>
+              <th>Categoría (Nivel 1)</th>
+              <th>Subcategoría (Nivel 2)</th>
+              <th>Sub‑subcategoría (Nivel 3)</th>
               <th>Activo</th>
               <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
             {categoriasOrdenadas.map((cat) => {
-              const padre = categorias.find(p => p.id === cat.parent_id);
+              const [nivel1, nivel2, nivel3] = getAncestros(cat);
               return (
                 <tr key={cat.id}>
                   <td>{cat.id}</td>
-                  <td>{renderNombreConPadre(cat, 0)}</td>
-                  <td>{cat.slug}</td>
-                  <td>{padre ? padre.nombre : '—'}</td>
+                  <td>{nivel1 || '—'}</td>
+                  <td>{nivel2 || '—'}</td>
+                  <td>{nivel3 || '—'}</td>
                   <td>
                     <span className={`cl-badge ${cat.activo ? 'cl-active' : 'cl-inactive'}`}>
                       {cat.activo ? 'Activo' : 'Inactivo'}

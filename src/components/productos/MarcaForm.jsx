@@ -17,7 +17,6 @@ const MarcaForm = () => {
   const [logoFile, setLogoFile] = useState(null);
   const [logoPreview, setLogoPreview] = useState('');
 
-  // Cargar datos en edición
   useEffect(() => {
     if (isEdit) {
       const fetchMarca = async () => {
@@ -38,6 +37,7 @@ const MarcaForm = () => {
             navigate('/productos/marcas');
           }
         } catch (error) {
+          console.error('Error al cargar marca:', error);
           Swal.fire('Error', 'Error de conexión', 'error');
         }
       };
@@ -62,9 +62,8 @@ const MarcaForm = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // ✅ Prevenir recarga
+    e.preventDefault();
 
-    // Validar nombre
     if (!formData.nombre.trim()) {
       Swal.fire('Atención', 'El nombre es obligatorio', 'warning');
       return;
@@ -72,18 +71,11 @@ const MarcaForm = () => {
 
     setLoading(true);
 
-    // Construir FormData
     const payload = new FormData();
     payload.append('nombre', formData.nombre.trim());
     payload.append('activo', formData.activo ? 'true' : 'false');
     if (logoFile) {
       payload.append('logo', logoFile);
-    }
-
-    // 🔍 LOG para ver qué se envía
-    console.log('📤 Enviando FormData:');
-    for (let [key, value] of payload.entries()) {
-      console.log(key, value);
     }
 
     const url = isEdit
@@ -95,7 +87,6 @@ const MarcaForm = () => {
       const res = await fetch(url, {
         method,
         body: payload
-        // NO headers: Content-Type
       });
 
       const data = await res.json();
@@ -108,6 +99,7 @@ const MarcaForm = () => {
         });
         navigate('/productos/marcas');
       } else {
+        // Mostrar el mensaje de error que envía el servidor
         Swal.fire('Error', data.error || 'Ocurrió un error', 'error');
       }
     } catch (error) {
